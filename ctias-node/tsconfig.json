@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "allowJs": true,
+
+
+    "types": [
+      "node"
+    ]
+  },
+  "files": [
+    "./src/app/util/graph/index.ts"
+  ]
+
+}

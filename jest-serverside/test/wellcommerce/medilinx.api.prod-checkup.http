@@ -1,0 +1,55 @@
+### 웰커머스 checkup 등록
+POST https://partner.medilinx.co.kr/api/medilinx/v1/checkup/register
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer eoqTp2iUziiPA3F4mSylxCDWGzx73MR2B51l0Hqie6ajpbx7V/LhG86oGN5HMLjd9Fl1gSoG3wjJj0eAVKdcjXSCNOGJG/GSBs5a3e+jPNdoPPcDHZOlvplJYVqUZERPIR4vlv0UXJeB0FKYjQYARNKV1gpUDRKWIiUivl7366fERtonEm+ExRQJMbOIad3r
+
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test.pdf";
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\test.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="medilinxCheckupRequestInputList"
+
+[
+    {
+        "hosId": "5DCC50459B87C15F44B323AA2BF5D0BA3DF0266C2748853E99EBA20099953ECA",
+        "fileNames": ["test.pdf"],
+        "name": "이학수",
+        "birthday": "910815",
+        "chartNo": "12344321",
+        "age": 15,
+        "gender": "F",
+        "phoneNo": "01031187242",
+        "email": "jhs@peernine.co.kr",
+        "recipientName": null,
+        "recipientBirthday": null,
+        "recipientPhoneNo": null,
+        "zipcode": "11554",
+        "address1": "서울시",
+        "address2": "양천구",
+        "visitDate": "20220507",
+        "checkupDate": "20220504",
+        "sendAlimtalk": "Y",
+        "sendEmail": "N",
+        "sendPost": "N"
+    }
+]
+
+
+### 웰커머스 survey 조회
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/answer
+Content-Type: application/json
+Authorization: Bearer eoqTp2iUziiPA3F4mSylxCDWGzx73MR2B51l0Hqie6ajpbx7V/LhG86oGN5HMLjd9Fl1gSoG3wjJj0eAVKdcjXSCNOGJG/GSBs5a3e+jPNdoPPcDHZOlvplJYVqUZERPIR4vlv0UXJeB0FKYjQYARNKV1gpUDRKWIiUivl7366fERtonEm+ExRQJMbOIad3r
+
+[{
+  "hosId": "5DCC50459B87C15F44B323AA2BF5D0BA3DF0266C2748853E99EBA20099953ECA",
+  "visitDate": "20220519",
+  "chartNo": "202101010101",
+  "name": "박성관",
+  "birthday": "1972-09-09",
+  "age": 50,
+  "gender": "M",
+  "phoneNo": "01087830076"
+}]

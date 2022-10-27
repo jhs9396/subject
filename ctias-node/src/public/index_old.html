@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/import.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.1/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/textures@1.2.0/dist/textures.min.js"></script>
+  <script src="/js/client.js"></script>
+  <style>
+    @font-face {
+      font-family: Open Sans;
+      src: url(/font/OpenSans-Bold.ttf) format('truetype'),
+      url(/font/OpenSans-Light.ttf) format('truetype'),
+      url(/font/OpenSans-Regular.ttf) format('truetype');
+      font-weight: 400;
+    }
+
+    html, body, #container {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      border: 0px;
+      overflow: hidden;
+      background-color: #fbf8f1;
+    }
+
+    #result {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      border: 0px;
+      overflow: hidden;
+      background-color: #f3fffa;
+      position: absolute;
+      z-index: 10;
+      left: 200px;
+    }
+
+    .box-component {
+      z-index: 100;
+    }
+
+    .vertexGrp circle {
+      stroke-width: 2px;
+      stroke: #221714;
+      fill: #fbf8f1;
+    }
+
+    .vertexGrp g:focus circle {
+      stroke-dasharray: 5;
+    }
+
+    .vertexGrp g:hover circle {
+      fill: #d9d9d9;
+    }
+
+    .vertexGrp g.selected circle {
+      fill: url(#cnhcj);
+    }
+
+    .vertexGrp g:focus  {
+      outline: none;
+    }
+
+    .vertexGrp text {
+      font-family: Open Sans;
+      font-size: 15.5px;
+      letter-spacing:  -.25px ;
+      text-anchor: middle;
+      user-select: none;
+    }
+    .edgeGrp path {
+      fill:   none;
+      stroke-width: 2px;
+      stroke: #807c80;
+    }
+
+    .edgeGrp .linkbg {
+      fill:   none;
+      stroke-width: 0px;
+    }
+
+    .edgeGrp  g:focus .linkbg {
+      fill:   none;
+      stroke-width: 0px;
+    }
+
+    .edgeGrp text {
+      font-size: 15.5px;
+      text-anchor: middle;
+      letter-spacing: 2px;
+    }
+
+  </style>
+  <script>
+    let randomX = d3.randomUniform(150, 800)
+    let randomY = d3.randomUniform(150, 600)
+
+    // todo : random position 대신 고정 위치값을 넣어준다
+    // fixme : position function
+    // todo : url label 추가
+    const labels = ['threat_event','ip','domain','email_message','email_address','file','location']
+    const h = window.innerHeight/4.0
+    const w = window.innerWidth/4.0
+
+    // const xPosition = [400,200,600,400,400,600,200]
+    // const yPosition = [200,400,400,400,600,600,600]
+
+    const xPosition = [w*2,w,w*3,w*2,w*2,w*3,w]
+    const yPosition = [h,h*2,h*2,h*2,h*3,h*3,h*3]
+
+    function positionX(label) {
+      let x = 0
+      labels.forEach((value,index)=>{
+        if(value===label) {
+          x = xPosition[index_old]
+        }
+      })
+      return x
+    }
+
+    function positionY(label) {
+      let y = 0
+      labels.forEach((value,index)=>{
+        if(value===label) {
+          y = yPosition[index_old]
+        }
+      })
+      return y
+    }
+
+    var metaInfo = {
+      nodes:[
+        {id:'domain', icon: 'globe-asia-solid.svg', x: positionX('domain'), y: positionY('domain'), iw:496, ih: 512, path: "M336.5 160C322 70.7 287.8 8 248 8s-74 62.7-88.5 152h177zM152 256c0 22.2 1.2 43.5 3.3 64h185.3c2.1-20.5 3.3-41.8 3.3-64s-1.2-43.5-3.3-64H155.3c-2.1 20.5-3.3 41.8-3.3 64zm324.7-96c-28.6-67.9-86.5-120.4-158-141.6 24.4 33.8 41.2 84.7 50 141.6h108zM177.2 18.4C105.8 39.6 47.8 92.1 19.3 160h108c8.7-56.9 25.5-107.8 49.9-141.6zM487.4 192H372.7c2.1 21 3.3 42.5 3.3 64s-1.2 43-3.3 64h114.6c5.5-20.5 8.6-41.8 8.6-64s-3.1-43.5-8.5-64zM120 256c0-21.5 1.2-43 3.3-64H8.6C3.2 212.5 0 233.8 0 256s3.2 43.5 8.6 64h114.6c-2-21-3.2-42.5-3.2-64zm39.5 96c14.5 89.3 48.7 152 88.5 152s74-62.7 88.5-152h-177zm159.3 141.6c71.4-21.2 129.4-73.7 158-141.6h-108c-8.8 56.9-25.6 107.8-50 141.6zM19.3 352c28.6 67.9 86.5 120.4 158 141.6-24.4-33.8-41.2-84.7-50-141.6h-108z" },
+        {id:'ip', icon: 'desktop-solid.svg', x: positionX('ip'), y: positionY('ip'), iw:576, ih: 512,path:"M528 0H48C21.5 0 0 21.5 0 48v320c0 26.5 21.5 48 48 48h192l-16 48h-72c-13.3 0-24 10.7-24 24s10.7 24 24 24h272c13.3 0 24-10.7 24-24s-10.7-24-24-24h-72l-16-48h192c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm-16 352H64V64h448v288z"  },
+        {id:'email_message', icon: 'envelope-regular.svg', x: positionX('email_message'), y: positionY('email_message'), iw:512, ih: 512,path: "M464 64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm0 48v40.805c-22.422 18.259-58.168 46.651-134.587 106.49-16.841 13.247-50.201 45.072-73.413 44.701-23.208.375-56.579-31.459-73.413-44.701C106.18 199.465 70.425 171.067 48 152.805V112h416zM48 400V214.398c22.914 18.251 55.409 43.862 104.938 82.646 21.857 17.205 60.134 55.186 103.062 54.955 42.717.231 80.509-37.199 103.053-54.947 49.528-38.783 82.032-64.401 104.947-82.653V400H48z" },
+        {id:'email_address', icon: 'address-card-regular.svg', x: positionX('email_address'), y: positionY('email_address'), iw:576, ih: 512,path: "M528 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h480c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm0 400H48V80h480v352zM208 256c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm-89.6 128h179.2c12.4 0 22.4-8.6 22.4-19.2v-19.2c0-31.8-30.1-57.6-67.2-57.6-10.8 0-18.7 8-44.8 8-26.9 0-33.4-8-44.8-8-37.1 0-67.2 25.8-67.2 57.6v19.2c0 10.6 10 19.2 22.4 19.2zM360 320h112c4.4 0 8-3.6 8-8v-16c0-4.4-3.6-8-8-8H360c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8zm0-64h112c4.4 0 8-3.6 8-8v-16c0-4.4-3.6-8-8-8H360c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8zm0-64h112c4.4 0 8-3.6 8-8v-16c0-4.4-3.6-8-8-8H360c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8z" },
+        {id:'file', icon: 'file-regular.svg', x: positionX('file'), y: positionY('file'), iw:384, ih: 512,path: "M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zM332.1 128H256V51.9l76.1 76.1zM48 464V48h160v104c0 13.3 10.7 24 24 24h104v288H48z" },
+        {id:'threat_event', icon: 'angry-regular.svg', x: positionX('threat_event'), y: positionY('threat_event'), iw:496, ih: 512,path: "M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-110.3 0-200-89.7-200-200S137.7 56 248 56s200 89.7 200 200-89.7 200-200 200zm0-144c-33.6 0-65.2 14.8-86.8 40.6-8.5 10.2-7.1 25.3 3.1 33.8s25.3 7.2 33.8-3c24.8-29.7 75-29.7 99.8 0 8.1 9.7 23.2 11.9 33.8 3 10.2-8.5 11.5-23.6 3.1-33.8-21.6-25.8-53.2-40.6-86.8-40.6zm-48-72c10.3 0 19.9-6.7 23-17.1 3.8-12.7-3.4-26.1-16.1-29.9l-80-24c-12.8-3.9-26.1 3.4-29.9 16.1-3.8 12.7 3.4 26.1 16.1 29.9l28.2 8.5c-3.1 4.9-5.3 10.4-5.3 16.6 0 17.7 14.3 32 32 32s32-14.4 32-32.1zm199-54.9c-3.8-12.7-17.1-19.9-29.9-16.1l-80 24c-12.7 3.8-19.9 17.2-16.1 29.9 3.1 10.4 12.7 17.1 23 17.1 0 17.7 14.3 32 32 32s32-14.3 32-32c0-6.2-2.2-11.7-5.3-16.6l28.2-8.5c12.7-3.7 19.9-17.1 16.1-29.8z" },
+        {id:'location', icon: 'map-marker-alt-solid.svg', x: positionX('location'), y: positionY('location'), iw:384, ih: 512,path: "M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z" }
+      ],
+      links:[
+        {label:'used', source:'threat_event', target:'email_message'},
+        {label:'register', source:'email_message', target:'domain'},
+        {label:'email_from', source:'email_message', target:'email_address'},
+        {label:'sent', source:'email_message', target:'email_address'},
+        {label:'received', source:'email_message', target:'email_address'},
+        {label:'locate', source:'ip', target:'location'},
+        {label:'used', source:'threat_event', target:'ip'},
+        {label:'used', source:'threat_event', target:'domain'},
+        {label:'related_to', source:'ip', target:'email_address'},
+        {label:'attached', source:'email_message', target:'file'}
+      ],
+      nodeById(nId){
+        return this.nodes.find(n=>n.id==nId)
+      }
+    }
+
+    metaInfo.links = metaInfo.links.map(l=>{
+      l._s = metaInfo.nodeById(l.source)
+      l._t = metaInfo.nodeById(l.target)
+      return l
+    })
+
+  </script>
+</head>
+<body>
+
+<div id="wrap" class="col">
+  <div class="abs" data-name="keywordPath">
+    <div class="row">
+      <div class="search-box box row border">
+        <div class="header row-all">
+          <h3>Keyword</h3>
+        </div>
+        <div class="content row" id="keywordInput" >
+          <input type="text" placeholder="search label by keyword" />
+          <img src="/icon/search.svg" alt="searchicon" />
+        </div>
+      </div>
+
+      <div class="box row ml10 border">
+        <div class="header row-all">
+          <h3>Path Navi</h3>
+        </div>
+        <div class="content row row-m">
+          <div class="path-box row row-m scroll">
+            <p class="item node">( E-mail )</p>
+            <!--<p class="item">- [ email label name ] -</p>-->
+            <!--<p class="item node">( Domain )</p>-->
+            <!--<p class="item">- [ email label name ] -</p>-->
+            <!--<p class="item node">( Location )</p>-->
+          </div>
+        </div>
+        <div class="footer">
+          <a class="deep"><img src="/icon/arrow-right.svg" alt="pathplayicon"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="container">
+    <!--<img src="/icon/address-card-regular.svg" width="32" >-->
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <g class="main">
+        <g class="edgeGrp">
+          <!--<g tabindex="0">-->
+          <!--<path d="M 200 400 L 450 400 m -5 -5 l 5 5 l -5 5" style="stroke-width: 2px; stroke: #221714;"></path>-->
+          <!--<text class="thin" x="350" y="390">edge #01 </text>-->
+          <!--</g>-->
+        </g>
+        <g class="vertexGrp">
+          <!--<g class='vertex' transform="translate(200,200)" tabindex="0">-->
+          <!--<circle r="40" >-->
+          <!--</circle>-->
+          <!--<text class="label" y="60">hello</text>-->
+          <!--<image xlink:href="/icon/address-card-regular.svg" width="40" height="40" x="-20" y="-20" />-->
+          <!--</g>-->
+        </g>
+      </g>
+
+      <g class="result">
+
+      </g>
+
+      <g class="interude">
+
+      </g>
+
+      <defs>
+        <marker id="arrowhead" refX="0" refY="2" orient="auto" markerUnits="strokeWidth" markerWidth="5"
+          markerHeight="4">
+          <path d="M 0,1 V 3 L3,2 Z" fill="#337" stroke="#337">
+          </path>
+        </marker>
+
+        <pattern id="odkzl" patternUnits="userSpaceOnUse" width="20" height="20">
+          <circle cx="10" cy="10" r="2" fill="#343434" stroke="#343434" stroke-width="0"></circle>
+          <circle cx="0" cy="0" r="2" fill="#343434" stroke="#343434" stroke-width="0"></circle>
+          <circle cx="0" cy="20" r="2" fill="#343434" stroke="#343434" stroke-width="0"></circle>
+          <circle cx="20" cy="0" r="2" fill="#343434" stroke="#343434" stroke-width="0"></circle>
+          <circle cx="20" cy="20" r="2" fill="#343434" stroke="#343434" stroke-width="0"></circle>
+        </pattern>
+        <pattern id="kfjdh" patternUnits="userSpaceOnUse" width="4" height="4">
+          <path d="M 0,4 l 4,-4 M -1,1 l 2,-2 M 3,5 l 2,-2" stroke-width="1" shape-rendering="auto" stroke="#343434"
+            stroke-linecap="square"></path>
+        </pattern>
+        <pattern id="cnhcj" patternUnits="userSpaceOnUse" width="4" height="4">
+          <path d="M 0,4 l 4,-4 M -1,1 l 2,-2 M 3,5 l 2,-2" stroke-width="1" shape-rendering="auto" stroke="#bbbbbb"
+            stroke-linecap="square"></path>
+        </pattern>
+
+        <g>
+          <path id="filterIcon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" d="M487.976 0H24.028C2.71 0-8.047 25.866 7.058 40.971L192 225.941V432c0 7.831 3.821 15.17 10.237 19.662l80 55.98C298.02 518.69 320 507.493 320 487.98V225.941l184.947-184.97C520.021 25.896 509.338 0 487.976 0z"/>
+        </g>
+      </defs>
+    </svg>
+  </div>
+
+
+  <!-- 아코디언.off top -->
+
+  <!-- <div class="accord col">
+        <div class="box row border">
+          <div class="header row-all">
+              <h3>Path Navi</h3>
+          </div>
+          <div class="content row row-m flex-1">
+            <div class="path-box row row-m scroll">
+                <p class="item node">( E-mail )</p>
+                <p class="item">- [ email label name ] -</p>
+                <p class="item node">( Domain )</p>
+                <p class="item">- [ email label name ] -</p>
+                <p class="item node">( Location )</p>
+            </div>
+          </div>
+          <div class="footer">
+            <a class="deep"><img src="svg/angle-up.svg" alt="pathplayicon"></a>
+          </div>
+        </div>
+        <div class="content"></div>
+      </div> -->
+
+  <!--
+        아코디언.on center
+
+        ************ 접힌 아코디언의 a 클릭시 해당 div.accord 에 클래스 on, flex-1 추가,
+        div.accord > div.content 에 flex-1 추가 되어야함
+      -->
+
+  <!-- <div class="accord col on flex-1">
+        <div class="box row border">
+            <div class="header row-all">
+                <h3>Path Navi</h3>
+            </div>
+            <div class="content row row-m flex-1">
+              <div class="path-box row row-m scroll">
+                <p class="item node">( E-mail )</p>
+                <p class="item">- [ email label name ] -</p>
+                <p class="item node">( Domain )</p>
+                <p class="item">- [ email label name ] -</p>
+                <p class="item node">( Location )</p>
+              </div>
+            </div>
+            <div class="footer">
+              <a class="deep"><img src="svg/angle-down.svg" alt="pathplayicon"></a>
+            </div>
+        </div>
+        <div class="content flex-1">
+          <div class="abs" data-name="labelAttr">
+            <div class="card">
+              <div class="header row row-bet">
+                  <h3>Label TITLE</h3>
+                  <button><img src="svg/close.svg" alt="closeBtn"/></button>
+              </div>
+              <div class="content">
+                <table class="attr-table">
+                  <tr>
+                    <th width="150">Attribute</th>
+                    <th width="200">Value</th>
+                  </tr>
+                  <tr>
+                    <td>risk_level</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>dtime</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>action</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>mailtype</td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+  <!-- 아코디언.off bottom -->
+
+  <!-- <div class="accord col">
+        <div class="box row border">
+          <div class="header row-all">
+            <h3>Path Navi</h3>
+          </div>
+          <div class="content row row-m flex-1">
+            <div class="path-box row row-m scroll">
+              <p class="item node">( E-mail )</p>
+              <p class="item">- [ email label name ] -</p>
+              <p class="item node">( Domain )</p>
+              <p class="item">- [ email label name ] -</p>
+              <p class="item node">( Location )</p>
+            </div>
+          </div>
+          <div class="footer">
+            <a class="deep"><img src="svg/angle-up.svg" alt="pathplayicon"></a>
+          </div>
+        </div>
+        <div class="content">
+        </div>
+      </div> -->
+
+</div>
+
+</body>
+<script>
+  const VERTEX_RADIUS = 40;
+  const EDGE_WIDTH = 2;
+
+  const texture = textures.circles()
+          .complement();
+  const texture2 = textures.lines()
+          .size(4)
+          .stroke('#dbdbdb')
+          .strokeWidth(1);
+
+  console.log(texture.url())
+  console.log(texture2.url())
+
+  d3.select('svg').call(texture);
+  d3.select('svg').call(texture2);
+
+  let vertexSelection = d3.select('.vertexGrp').selectAll('g.vertex').data(metaInfo.nodes,d=>d.id)
+  let edgeSelection = d3.select('.edgeGrp').selectAll('g.edge').data(metaInfo.links)
+
+  function updateVertex() {
+    let sel = d3.select('.vertexGrp').selectAll('g.vertex');
+    sel.classed('selected',d=>d.selected)
+    sel.selectAll('animateTransform')
+            .attr('to', d=>{
+              return d.selected ? 360 : 0
+            })
+            .attr('dur', d=>{
+              return d.selected ? '10s' : '0s'
+            })
+  }
+
+  function getPointAtLengthMinusNodeRadius(pathstring, radius, lineWidth) {
+    var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', pathstring);
+    var totLen = p.getTotalLength();
+
+    var l = totLen > radius ? totLen - radius - lineWidth*4 - 1 : totLen
+    return p.getPointAtLength(Math.abs(l));
+  }
+
+  document.getElementById('container').addEventListener('click',()=>{
+    console.log('cc')
+    metaInfo.nodes.forEach(n=>n.selected = false)
+    updateVertex()
+  });
+
+  function enterVertex(sel) {
+    let grp = sel.append('g').classed('vertex', true)
+            .attr('tabindex', 0)
+            .attr('transform', d=>`translate(${d.x},${d.y})`)
+    grp.on('click', dataum=> {
+      d3.event.stopPropagation();
+      console.log(JSON.stringify(dataum))
+      dataum.selected=true;
+
+      updateVertex()
+    })
+
+    let circleElem =  grp.append('circle').attr('r', VERTEX_RADIUS)
+
+    circleElem.append('animateTransform')
+            .attr('attributeType', 'xml')
+            .attr('attributeName', 'transform')
+            .attr('type', 'rotate')
+            .attr('from', '0')
+            .attr('to', '0')
+            .attr('begin', '0')
+            .attr('dur', '10s')
+            .attr('repeatCount', 'indefinite')
+
+    grp.append('text').classed('label', true).attr('y',60).text(d=>d.id)
+    grp.append('path').attr('d', d=>d.path).attr('transform',d=>`scale(0.061, 0.061) translate(-${d.iw/2},-${d.ih/2})`)
+    grp.append('use')
+            .style('color','#ff8260')
+            .attr("xlink:xlink:href", "#filterIcon")
+            .attr('transform',d=>`scale(0.04, 0.04) translate(512,-1024)`)
+  }
+
+  function makeEdgePathString(s,t) {
+    let dx = t.x - s.x;
+    let dy = t.y - s.y;
+
+    let endPoint = getPointAtLengthMinusNodeRadius(`m0 0 l${dx} ${dy}`, 50, 2)
+
+    return `m0 0 l${endPoint.x} ${endPoint.y}`
+  }
+
+  function enterEdge(sel) {
+    let grp = sel.append('g').classed('edge', true).attr('transform', d=>{
+      console.log(d)
+      return `translate(${d._s.x},${d._s.y})`
+    });
+
+    grp.append('path')
+            .attr('d', d=>makeEdgePathString(d._s,d._t))
+            .attr("marker-end", "url(#arrowhead)")
+  }
+
+
+
+  vertexSelection.enter().call(enterVertex);
+  edgeSelection.enter().call(enterEdge);
+
+
+
+</script>
+</html>

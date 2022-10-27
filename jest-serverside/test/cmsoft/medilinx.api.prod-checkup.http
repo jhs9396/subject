@@ -1,0 +1,74 @@
+### 김포우리
+POST https://partner.medilinx.co.kr/api/medilinx/v1/checkup/list
+Content-Type: application/json
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJAPDmNDyA79SpxEpvbOhW65gpRWe/I3tgJWSu5TuU7jEUOLasEE1788zsmFOxNa0NMynQfeF067P6CK4VysEtWbKpzWgqEpKkpGWWoL3iquN
+
+{
+  "hosId": "8F76D14A4D4505AC52AA7F0DB40B357D1EB2651BE6CDAEF09B9E5C6816228AEC",
+  "startDate": "20220401",
+  "endDate": "20220430"
+}
+
+
+
+
+### 씨젠
+POST https://partner.medilinx.co.kr/api/medilinx/v1/checkup/list
+Content-Type: application/json
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJI7DUD2aUFeRlhV0eOzgt4f3Mz2GZ5xKlX/BQd5n3YmB8Nn9IIUP7RoQZCm/35O/BHgJXF3WHt3O5cGPhDKM8oBJRzdwN4K8+kmpTFIJTB4+
+
+{
+  "hosId": "AEA0F1DF3B0D5CA6905FD409DCEFEB6354A33645540FF4A4C71B55EB29F5CEF3",
+  "startDate": "20220401",
+  "endDate": "20220430"
+}
+
+
+### 씨엠소프트병원 결과지 등록
+POST https://partner.medilinx.co.kr/api/medilinx/v1/checkup/register
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJGqO0If1Sb3SIUYZpCidi6SqLfC5FC3p9JZgt55SCJy77wQwYti/aWLVJzDxFnFFL63jJwirNFTMXo+xCt+kWOgxAZAeeTcGcXRIIvxPDZat
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0001_220217140417.pdf";
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\0001_220217140417.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="medilinxCheckupRequestInputList"
+
+[{
+			 "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+			 "fileNames": ["0001_220217140417.pdf"],
+		 	 "name": "이학수",
+			 "birthday": "19910815",
+		 	 "chartNo": "112234456",
+		 	 "age": 32,
+		 	 "gender": "M",
+		 	 "phoneNo": "01031187242",
+		 	 "email": "jhs@peernine.co.kr",
+			 "recipientName": "",
+			 "recipientBirthday": "",
+			 "recipientPhoneNo": "",
+			 "zipcode": "12345",
+			 "address1": "테스트주소입니다1",
+			 "address2": "상세주소입니다",
+			 "visitDate": "20220530",
+			 "checkupDate": "20220531",
+			 "decisionDate": "20220602",
+			 "sendAlimtalk": "N",
+			 "sendEmail": "Y",
+			 "sendPost": "N"
+}]
+
+
+### 일산복음
+POST https://partner.medilinx.co.kr/api/medilinx/v1/checkup/list
+Content-Type: application/json
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJKyxTXdrZrfDNs49lDIhgwbiK70hPyq5UoVf75/7Pww0vGWpi/NHqIHmsUN+SApGxzNBqVMvZAtFH+j+UcEuj91OzeQyGVV9VgM9cK25RlZU
+
+{
+  "hosId": "4166671BBC265C337B11E457CC9628AE39FF704E4C2F00C19FCACBE640DF8451",
+  "startDate": "20220401",
+  "endDate": "20220430"
+}

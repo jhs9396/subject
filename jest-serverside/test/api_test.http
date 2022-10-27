@@ -1,0 +1,496 @@
+###
+POST http://localhost:4000/pdf/content
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0001_220217133837.pdf"
+
+< C:\Users\hsjeon\AppData\Local\Postman\files\0001_220217133837.pdf
+--WebAppBoundary--
+
+### 인천성모병원 공단 결과지
+POST http://localhost:4000/pdf/content
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="청주한국병원_활성산소.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\청주한국병원_활성산소.pdf
+--WebAppBoundary--
+
+
+### 인천성모병원 공단 결과지(유재선)
+POST http://localhost:4000/pdf/content
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="examinee_info.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\examinee_info.pdf
+--WebAppBoundary--
+
+
+
+### 결과지 테스트 파일
+
+POST http://localhost:4005/api/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="Secure document (2D Barcode)_의료법인힐튼.pdf"
+
+< C:\Users\hsjeon\AppData\Local\Postman\files\Secure document (2D Barcode)_의료법인힐튼.pdf
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+CFB7392B9707C7F0C466C738B978B23502F03D570025CEE9A6575A29C67A81DA
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+hyunsu
+
+
+
+### 결과지 테스트 파일 (0001)
+
+POST http://localhost:4000/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="전용화.pdf"
+
+< C:\Users\hsjeon\Downloads\download\backup_20220811\모바일결과지\테스트\전용화.pdf
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+348FF2BF1971C42A3A3669046E1D1075E8E13CDFAAC20C5E055AB9DB0278F513
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+hospital11223
+
+
+### 인천성모병원 공단 결과지
+POST http://localhost:4000/pdf/content
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="전용화.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\전용화.pdf
+--WebAppBoundary--
+
+### 결과지 테스트 파일 (0001)
+
+POST http://localhost:4000/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="여성암검진.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\여성암검진.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+hyunsu
+
+
+### OCR test
+POST http://localhost:4005/api/pdf/tesseract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="20220311_심민정_397319.txt"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\20220311_심민정_397319.pdf
+
+
+
+
+
+
+### 결과지 추출 API
+
+POST http://192.168.2.87/api/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="일반검진(3)_유정훈.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\일반검진(3)_유정훈.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+hyunsu
+
+
+
+
+### 결과지 테스트 파일 (0001)
+
+POST http://192.168.2.87/api/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="강혜원.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\강혜원.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+hyunsu
+
+
+
+
+### 결과지 테스트 파일 (0001)
+
+POST http://192.168.2.87/api/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0001_220415153236.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\경북대결과지\김은자\0001_220415153236.pdf
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0001_220415153238.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\경북대결과지\김은자\0001_220415153238.pdf
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0001_220415153243.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\경북대결과지\김은자\0001_220415153243.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+6971FF5BCF0B87E16CD3925FA91F629012FDEC5883BB6EB3F153AB8FAFEC54AB
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+ksh.peernine
+
+
+
+### 결과지 종합 인천성모병원 (운영계)
+
+POST https://partner.medilinx.co.kr/api/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="file"; filename="일반검진(3)_유정훈.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\일반검진(3)_유정훈.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+5AF2513CC2D41EF63D8EE07AACD30B5D18C9D81DCF8AA8FC5C7B94E40CE3D526
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+incheonsm_procheckup
+
+
+
+
+### 결과지 공단 인천성모병원 (운영계)
+
+POST https://siren.medilinx.co.kr:4005/api/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="김용순5.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\김용순5.pdf
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+537FE324DD8738F3B7861E38D1D8254BA2234D14FE59C959EAA32A606F3AB7BD
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+incheon_checkup
+
+
+
+
+### 결과지 공단 인천성모병원 (운영계)
+
+POST https://partner.medilinx.co.kr/api/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0001_220701104350.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\인천성모_종검결과지.pdf
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+1308650048A79B3222FDD9B0BD40930DA61CCC511225CD1B7706FB0220969D36
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+ksh.peernine
+
+
+### 인천성모병원 공단 결과지(유재선)
+POST https://siren.medilinx.co.kr:4005/api/pdf/content
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="마스토체크 샘플데이터(인천성모).pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\마스토체크 샘플데이터(인천성모).pdf
+--WebAppBoundary--
+
+
+
+
+
+
+### 결과지 테스트 파일 (0001)
+
+POST https://partner.medilinx.co.kr/api/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0001_220504154036.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\0001_220504154036.pdf
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+hyunsu
+
+
+### 인천성모병원 종합 결과지
+POST http://localhost:4005/api/pdf/content
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0002.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\종합\0002.pdf
+--WebAppBoundary--
+
+
+
+###
+###
+POST http://localhost:3000/cats
+Content-Type: application/json
+
+{
+  "name": "Joe",
+  "age": 50,
+  "breed": "question"
+}
+
+###
+GET http://localhost:3000/cats
+
+
+###
+POST http://localhost:4000/issue/webAppKeyByExaminee
+Content-Type: application/json
+
+{
+  "name": "테스트1",
+  "birthday": "881111",
+  "phoneNo": "01077049885",
+  "hasRecipient": true
+}
+
+
+###
+POST http://localhost:4000/issue/webAppKeyByExaminee
+Content-Type: application/json
+
+{
+  "name": "최성옥",
+  "birthday": "661219",
+  "phoneNo": "01030671188",
+  "hasRecipient": false
+}
+
+
+###
+POST https://kraken.medilinx.co.kr:4000/issue/webAppKeyByExaminee
+Content-Type: application/json
+
+{
+  "name": "장선영",
+  "birthday": "810203",
+  "phoneNo": "01077532327",
+  "hasRecipient": true
+}
+
+###
+POST https://kraken.medilinx.co.kr:4000/issue/webAppKeyByExaminee
+Content-Type: application/json
+
+{
+  "name": "유연순",
+  "birthday": "510913",
+  "phoneNo": "01091530761",
+  "hasRecipient": false
+}
+
+
+###
+POST http://localhost:4000/emr/u2bio
+Content-Type: application/json
+
+{
+  "gumNo": "148881",
+  "docType": "1",
+  "hospitalId": 502
+}
+
+###
+POST https://kraken.medilinx.co.kr:4000/emr/u2bio
+Content-Type: application/json
+
+{
+  "gumNo": "7014",
+  "docType": "1",
+  "hospitalId": 43
+}
+
+###
+POST http://localhost:4005/api/pdf/content
+Content-Type: application/json
+
+
+
+### 결과지 테스트 파일 (tika)
+
+POST http://localhost:4005/api/tika/pdf
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="12efc965-a3bd-4c16-a360-5e41b8586f68.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\12efc965-a3bd-4c16-a360-5e41b8586f68.pdf
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminId"
+
+hyunsu
+
+
+
+### 결과지 테스트 파일 (0001)
+
+POST http://localhost:4000/checkup/background/register
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="24752.png"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\24752.png
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+B4541455C1D4E00066A57668722275A9B0B4021024AD6BC1855B21B595C63360
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+hyunsu-po

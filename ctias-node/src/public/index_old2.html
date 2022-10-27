@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/import.css">
+    <script src="/js/client.js"></script>
+    <style>
+        @font-face {
+            font-family: Open Sans;
+            src: url(/font/OpenSans-Bold.ttf) format('truetype'),
+            url(/font/OpenSans-Light.ttf) format('truetype'),
+            url(/font/OpenSans-Regular.ttf) format('truetype');
+            font-weight: 400;
+        }
+
+        html, body, #container {
+
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            border: 0px;
+            overflow: hidden;
+            background-color: #fbf8f1;
+        }
+
+        #result {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            border: 0px;
+            overflow: hidden;
+            background-color: #f3fffa;
+            position: absolute;
+            z-index: 10;
+            left: 200px;
+        }
+
+        .box-component {
+            z-index: 100;
+        }
+
+        .vertexGrp circle {
+            stroke-width: 2px;
+            stroke: #221714;
+            fill: #fbf8f1;
+        }
+
+        .vertexGrp path {
+            pointer-events: none;
+        }
+
+
+
+        .vertexGrp g:focus circle {
+            stroke-dasharray: 5;
+        }
+
+        .vertexGrp g:hover circle {
+            fill: url(#cnhcj);
+        }
+
+        .vertexGrp g.selected circle {
+            fill: #d9d9d9;
+        }
+
+        .vertexGrp g:focus  {
+            outline: none;
+        }
+
+        .vertexGrp text.rm {
+            pointer-events: all;
+        }
+
+        .vertexGrp text {
+            font-family: Open Sans;
+            font-size: 15.5px;
+            letter-spacing:  -.25px ;
+            text-anchor: middle;
+            user-select: none;
+            pointer-events: none;
+        }
+        .edgeGrp path {
+            fill:   none;
+            stroke-width: 2px;
+            stroke: #807c80;
+        }
+
+        .edgeGrp .linkbg {
+            fill:   none;
+            stroke-width: 0px;
+        }
+
+        .edgeGrp  g:focus .linkbg {
+            fill:   none;
+            stroke-width: 0px;
+        }
+
+        .edgeGrp text {
+            font-size: 15.5px;
+            text-anchor: middle;
+            letter-spacing: 2px;
+        }
+
+    </style>
+    <script>
+
+
+    </script>
+</head>
+<body>
+
+<div id="wrap" class="col">
+    <div class="abs" data-name="keywordPath">
+        <div class="row">
+            <div class="search-box box row border keyword" id="keywordInput">
+
+            </div>
+
+            <div class="box row ml10 border" id="patternInput">
+
+            </div>
+        </div>
+    </div>
+
+    <div id="container">
+    </div>
+
+</div>
+
+
+</body>
+</html>

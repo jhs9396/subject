@@ -1,0 +1,13 @@
+input WorkerInput {
+    name: String
+    organization: String
+    age: Int
+    gender: String
+}
+
+type WorkerOutput {
+    name: String
+    organization: String
+    age: Int
+    gender: String
+}

@@ -1,0 +1,48 @@
+### OCR 테스트
+POST http://localhost:4000/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="370689_인바디_한소영.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\370689_인바디_한소영.pdf
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+6971FF5BCF0B87E16CD3925FA91F629012FDEC5883BB6EB3F153AB8FAFEC54AB
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+ksh.peernine
+
+
+
+### 경북대 테스트 (개발)
+POST http://localhost:4000/pdf/extract
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0001_220415153241.pdf"
+
+< C:\Users\hsjeon\Downloads\모바일결과지\경북대결과지\김은자\0001_220415153241.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="hosId"
+
+6971FF5BCF0B87E16CD3925FA91F629012FDEC5883BB6EB3F153AB8FAFEC54AB
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="clientIp"
+
+0.0.0.0
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="adminName"
+
+ksh.peernine

@@ -1,0 +1,136 @@
+### 다인하이케어 결과지 등록
+POST https://partner.medilinx.co.kr/api//medilinx/v1/checkup/register
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAon6PW1K+ne4Vzt+Sg4XHupiOsZ92R2KDGfn0RpMumD+/2NAQ5YjzO5m2SufDCIPoskuuAh/f81LUiHBFPW1UEOW105VnmlPtyueBKanQpTUUA==
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0001_220217140417.pdf";
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\0001_220217140417.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="medilinxCheckupRequestInputList"
+
+[
+    {
+        "hosId": "E21F3C7F18C304DB610DA5A44A3603FD518DD5F7191FC34AA6665046B824F6E7",
+			 "fileNames": ["0001_220217140417.pdf"],
+		 	 "name": "이학수",
+			 "birthday": "19910815",
+		 	 "chartNo": "11225500",
+		 	 "age": 32,
+		 	 "gender": "M",
+		 	 "phoneNo": "01031187242",
+		 	 "email": "jhs@peernine.co.kr",
+			 "recipientName": "",
+			 "recipientBirthday": "",
+			 "recipientPhoneNo": "",
+			 "zipcode": "12345",
+			 "address1": "테스트주소입니다1",
+			 "address2": "상세주소입니다",
+			 "visitDate": "20220613",
+			 "checkupDate": "20220531",
+			 "sendAlimtalk": "N",
+			 "sendEmail": "Y",
+			 "sendPost": "N"
+    }
+]
+
+
+### KRAKEN API checkup list
+
+POST https://partner.medilinx.co.kr/api/medilinx/v1/checkup/list
+Content-Type: application/json
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAon6PW1K+ne4Vzt+Sg4XHupiOsZ92R2KDGfn0RpMumD+/2NAQ5YjzO5m2SufDCIPoskuuAh/f81LUiHBFPW1UEOW105VnmlPtyueBKanQpTUUA==
+
+{
+  "hosId": "E21F3C7F18C304DB610DA5A44A3603FD518DD5F7191FC34AA6665046B824F6E7",
+  "startDate": "20220301",
+  "endDate": "20220430"
+}
+
+###
+POST https://partner.medilinx.co.kr/api/medilinx/v1/checkup/list
+Content-Type: application/json
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJGqO0If1Sb3SIUYZpCidi6SqLfC5FC3p9JZgt55SCJy77wQwYti/aWLVJzDxFnFFL63jJwirNFTMXo+xCt+kWOgxAZAeeTcGcXRIIvxPDZat
+
+{
+  "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+  "startDate": "20210101",
+  "endDate": "20220430"
+}
+
+
+### 다인하이케어 결과지 등록
+POST https://partner.medilinx.co.kr/api/medilinx/v1/checkup/register
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJGqO0If1Sb3SIUYZpCidi6SqLfC5FC3p9JZgt55SCJy77wQwYti/aWLVJzDxFnFFL63jJwirNFTMXo+xCt+kWOgxAZAeeTcGcXRIIvxPDZat
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="you.pdf";
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\you.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="medilinxCheckupRequestInputList"
+
+[{
+			 "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+			 "fileNames": ["you.pdf"],
+		 	 "name": "전현수테스트",
+			 "birthday": "19881201",
+		 	 "chartNo": "555333",
+		 	 "age": 35,
+		 	 "gender": "M",
+		 	 "phoneNo": "01077049885",
+		 	 "email": "jhs@peernine.co.kr",
+			 "recipientName": "",
+			 "recipientBirthday": "",
+			 "recipientPhoneNo": "",
+			 "zipcode": "12345",
+			 "address1": "테스트주소입니다1",
+			 "address2": "상세주소입니다",
+			 "visitDate": "20220613",
+			 "checkupDate": "20220531",
+			 "sendAlimtalk": "N",
+			 "sendEmail": "Y",
+			 "sendPost": "N"
+			 }]
+
+
+### KRAKEN REST API checkup register
+
+POST http://localhost:4000/medilinx/v1/checkup/register
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAok+574iTllDbuYLmYgHJqSsp6fyEi7HtrMBp/qybGtIsFkf+tLXkpkneSD4r+q33Zo5f8+WgcV31SToeBBe+RHj87/GHyBNx+TxI5Urt+VBOQ==
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="TEST_20220117Normal1page_A11.pdf";
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\TEST_20220117Normal1page_A11.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="medilinxCheckupRequestInputList"
+
+[{
+			 "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+			 "fileNames": ["TEST_20220117Normal1page_A11.pdf"],
+		 	 "name": "테스트",
+			 "birthday": "19710101",
+		 	 "chartNo": "00001111",
+		 	 "age": 51,
+		 	 "gender": "M",
+		 	 "phoneNo": "01055966553",
+		 	 "email": "cmsoft@hanmail.net",
+			 "recipientName": "",
+			 "recipientBirthday": "",
+			 "recipientPhoneNo": "",
+			 "zipcode": "12345",
+			 "address1": "테스트주소입니다1",
+			 "address2": "상세주소입니다",
+			 "visitDate": "20220101",
+			 "checkupDate": "20220101",
+			 "sendAlimtalk": "N",
+			 "sendEmail": "Y",
+			 "sendPost": "N"
+}]

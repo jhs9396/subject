@@ -1,0 +1,156 @@
+### 문진 등록 (다인 API)
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/register
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAon6PW1K+ne4Vzt+Sg4XHupiOsZ92R2KDGfn0RpMumD+/2NAQ5YjzO5m2SufDCIPoskuuAh/f81LUiHBFPW1UEOW105VnmlPtyueBKanQpTUUA==
+
+ [{
+     "hosId": "E21F3C7F18C304DB610DA5A44A3603FD518DD5F7191FC34AA6665046B824F6E7",
+     "visitDate": "20220430",
+     "chartNo": "554433",
+     "name": "고길동",
+     "birthday": "690310",
+     "age": 54,
+     "gender": "M",
+     "phoneNo": "01000000000",
+     "healthPersonal": "Y",
+     "cancer": "Y",
+     "healthCompany": "N",
+     "healthCompre": "N",
+     "lifestyle": "N",
+     "dementia": "N",
+     "depression": "N",
+     "seniorHealth": "N",
+     "nutrition": "N",
+     "vascular": "N",
+     "jobstress": "N",
+     "dental": "N",
+     "healthSpecial": "N",
+     "nightshift": "N",
+     "radiation": "N"
+ }]
+
+
+### 문진지 방문일 변경
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/update/visit
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAon6PW1K+ne4Vzt+Sg4XHupiOsZ92R2KDGfn0RpMumD+/2NAQ5YjzO5m2SufDCIPoskuuAh/f81LUiHBFPW1UEOW105VnmlPtyueBKanQpTUUA==
+
+[{
+
+  "hosId": "E21F3C7F18C304DB610DA5A44A3603FD518DD5F7191FC34AA6665046B824F6E7",
+  "prevVisitDate": "20220430",
+  "visitDate": "20220415",
+  "chartNo": "554433",
+  "name": "고길동",
+  "birthday": "690310"
+}]
+
+
+### 문진지 수정
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/update/
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAon6PW1K+ne4Vzt+Sg4XHupiOsZ92R2KDGfn0RpMumD+/2NAQ5YjzO5m2SufDCIPoskuuAh/f81LUiHBFPW1UEOW105VnmlPtyueBKanQpTUUA==
+
+[{
+  "hosId": "E21F3C7F18C304DB610DA5A44A3603FD518DD5F7191FC34AA6665046B824F6E7",
+  "visitDate": "20220415",
+  "chartNo": "554433",
+  "name": "고길동",
+  "birthday": "690310",
+  "phoneNo": "01922334455",
+  "age": 54,
+  "gender": "M",
+  "healthPersonal": "Y",
+  "cancer": "N"
+}]
+
+
+### 문진지 예약취소
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/cancel
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAon6PW1K+ne4Vzt+Sg4XHupiOsZ92R2KDGfn0RpMumD+/2NAQ5YjzO5m2SufDCIPoskuuAh/f81LUiHBFPW1UEOW105VnmlPtyueBKanQpTUUA==
+
+[{
+  "hosId": "E21F3C7F18C304DB610DA5A44A3603FD518DD5F7191FC34AA6665046B824F6E7",
+  "visitDate": "20220415",
+  "chartNo": "554433",
+  "name": "고길동",
+  "birthday": "690310",
+  "age": 54,
+  "gender": "M",
+  "phoneNo": "01000000000"
+}]
+
+
+### 문진지 상태 변경
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/status
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAon6PW1K+ne4Vzt+Sg4XHupiOsZ92R2KDGfn0RpMumD+/2NAQ5YjzO5m2SufDCIPoskuuAh/f81LUiHBFPW1UEOW105VnmlPtyueBKanQpTUUA==
+
+{
+  "hosId": "E21F3C7F18C304DB610DA5A44A3603FD518DD5F7191FC34AA6665046B824F6E7",
+  "startDate": "20220301",
+  "endDate": "20220430"
+}
+
+
+### 문진지 상태값 조회
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/answer
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAon6PW1K+ne4Vzt+Sg4XHupiOsZ92R2KDGfn0RpMumD+/2NAQ5YjzO5m2SufDCIPoskuuAh/f81LUiHBFPW1UEOW105VnmlPtyueBKanQpTUUA==
+
+
+ [{
+     "hosId": "E21F3C7F18C304DB610DA5A44A3603FD518DD5F7191FC34AA6665046B824F6E7",
+     "visitDate": "20220427",
+     "chartNo": "2204270003",
+     "name": "유시민",
+     "birthday": "861214"
+ }]
+
+
+
+
+### 문진지 상태 변경
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/status
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer eoqTp2iUziiPA3F4mSylxCDWGzx73MR2B51l0Hqie6ajpbx7V/LhG86oGN5HMLjd9Fl1gSoG3wjJj0eAVKdcjYbHSzW8u4TmbcUoAvHkpbsvJHALJZBQ6siWSBwYqXDUIU0ORp6a5gCBAlyMo28to5qV///dpWtUQjoYRMyY8hkYGZqSfVi+DBfoUwyXCYoR
+
+{
+  "hosId": "B28B9EB92655E18F457F58F8D298794097781DC4514326AA058EFC8547F70EA1",
+  "startDate": "20220801",
+  "endDate": "20220831"
+}
+
+
+
+### 문진 등록 (다인 API)
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/register
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAolcwQOeLQXh23DrDMu431oOPiIbpIS6B8l2KykwFQSBqMDTQEA71qlDJSZv0QscOopmU88SoKYqi2mqUqwn7t2AQvk8tvupCGPyoiuG4RcXqw==
+
+[{
+  "hosId": "1308650048A79B3222FDD9B0BD40930DA61CCC511225CD1B7706FB0220969D36",
+  "visitDate": "20220908",
+  "chartNo": "554433",
+  "name": "고길동",
+  "birthday": "690310",
+  "age": 54,
+  "gender": "M",
+  "phoneNo": "01000000000",
+  "healthPersonal": "Y",
+  "cancer": "Y",
+  "healthCompany": "N",
+  "healthCompre": "N",
+  "lifestyle": "N",
+  "dementia": "N",
+  "depression": "N",
+  "seniorHealth": "N",
+  "nutrition": "N",
+  "vascular": "N",
+  "jobstress": "N",
+  "dental": "N",
+  "healthSpecial": "N",
+  "nightshift": "N",
+  "radiation": "N"
+}]

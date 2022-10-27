@@ -1,0 +1,13 @@
+#### Pattern 기반 조회 결과 그래프 데이터
+POST http://localhost:3000/api/keyword/latest
+Accept: application/json, application/hal+json
+Content-Type: application/json
+
+###
+POST http://localhost:3000/api/proto/graph_as_path
+Accept: application/json, application/hal+json
+Content-Type: application/json
+
+[{"gtype":"vertex","label":"email_message","params":[]},{"gtype":"edge","label":"email_to","direction":"forward"},{"gtype":"vertex","label":"email_address","params":[]}]
+
+###

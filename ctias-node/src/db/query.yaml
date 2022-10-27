@@ -1,0 +1,722 @@
+# root 로 표기된것은 해당 글자가 api url 을 구성하는데 사용되지 않는것을 의미한다.
+# 예를들어 api.search.pattern.root 는  api url 이 /api/search/pattern 으로 구성된다.
+
+
+bookmark:
+
+  getExtraInfo: |
+    (select
+      'isblacklist' as caption,
+      is_blacklist::text as value
+    from
+      public.black_list
+    where
+      gid = $1::graphid
+    order by event_date desc
+    limit 1)
+
+    union
+
+    (select
+      'bookmark_count' as caption,
+       count(*)::text as value
+    from
+      public.bookmark
+    where
+      user_id = $2
+      and gid = $1::graphid)
+
+
+  blacklist:
+    add: |
+      insert into public.black_list
+      (gid, is_blacklist, user_id, reason, is_candidate) values
+      ($1::graphid, true ,$2,$3, false)
+
+    remove: |
+      insert into public.black_list
+      (gid, is_blacklist, user_id, reason, is_candidate) values
+      ($1::graphid, false ,$2,$3, false)
+
+
+  custom_group:
+    add: |
+      insert into public.custom_group
+      (group_id, group_name) values ( $1, $2)
+
+    remove: |
+      delete from public.custom_group
+      where group_id = $1
+
+    list: |
+      with allgroups as (
+        select group_id,
+               group_name
+        from public.custom_group
+      ), bm as (
+        select
+            gid ,
+            group_id
+          from
+            public.bookmark
+          where
+            user_id = $1
+            and gid = $2::graphid
+      )
+      select
+             allgroups.*, bm.gid
+      from
+              allgroups
+      left OUTER JOIN bm ON allgroups.group_id = bm.group_id
+
+
+  bookmark:
+    add: |
+      insert into public.bookmark
+      (gid , user_id , group_id , create_datetime ) values ($1::graphid, $2, $3, now())
+
+
+    remove: |
+      delete from public.bookmark
+      where
+        gid = $1::graphid
+        and user_id = $2
+        and group_id = $3
+
+    list: |
+      select
+        gid ,
+        user_id ,
+        group_id ,
+        create_datetime
+      from
+        public.bookmark
+      where
+        user_id = $1
+      order by
+        create_datetime desc
+
+
+
+
+expand:
+  all: |
+    MATCH p=(a:<%= label %>)-[link]-(targetv)
+    WHERE id(a) = $1::graphid
+    AND   label(targetv) <> 'spam_sniper_temp' AND label(targetv) <> 'ddei_temp'
+    RETURN p
+
+  similar: |
+    MATCH p=(a)-[:similar_to]-()
+    WHERE id(a) = $1::graphid
+    RETURN p
+
+  similar2: |
+    MATCH p=(a)-[r:similar_to]-()
+    WHERE id(a) = $1::graphid
+    AND   r.weight >= $2
+    RETURN p
+
+meta:
+  find_attr: |
+    select
+      *
+    from
+      _CTIAS_META_ATTR_BY_LABEL
+    where
+      label = $1
+      and graph_type::text = $2
+
+  cluster_members: |
+    SELECT
+     cluster_id,
+     nodes
+    FROM
+     public.louvain_method_result
+    WHERE
+     nodes @> ARRAY[$1::graphid]
+
+post_install: |
+  create table _CTIAS_INTERNAL_KEYWORD (
+    owner text,
+    ts  timestamp,
+    last_use_ts timestamp,
+    keyword text PRIMARY KEY
+  );
+
+
+  create table _CTIAS_INTERNAL_SEARCH_PATTERN (
+    owner text,
+    ts  timestamp,
+    last_use_ts timestamp,
+    pattern_signature text, -- query string
+    pattern jsonb[],        -- pattern parameter
+    -- pattern_param jsonb[],  -- pattern.params
+    keyword text[],
+    label  text[],
+    pinned boolean
+  );
+
+
+  create type graph_type as enum('vertex','edge');
+  create type attr_type as enum('number','text', 'date');
+
+  create table _CTIAS_META_ATTR_BY_LABEL (
+    graph_type graph_type,
+    label text,
+    attr_name text,
+    attr_type attr_type
+
+  );
+
+  CREATE TABLE _CTIAS_META_IOC (
+    gid graphid,
+    label text,
+    value text
+  );
+
+  CREATE INDEX _CTIAS_META_IOC_idx_1 ON _CTIAS_META_IOC USING GIN (gid);
+
+    owner text,
+    ts  timestamp,
+    last_use_ts timestamp,
+    pattern_signature text, -- query string
+    pattern jsonb[],        -- pattern parameter
+    -- pattern_param jsonb[],  -- pattern.params
+    keyword text[],
+    label  text[],
+    pinned boolean
+
+internal:
+  pattern_insert: |
+    INSERT INTO _CTIAS_INTERNAL_SEARCH_PATTERN (ts, last_use_ts, pattern_signature, pattern, pinned) VALUES (now(), now(), $1, $2, false);
+
+  pattern_count: |
+    SELECT
+        count(*) AS cnt
+    FROM
+        _CTIAS_INTERNAL_SEARCH_PATTERN
+    WHERE
+        pattern_signature = $1
+
+keyword:
+  similar: |
+    SELECT
+      DISTINCT
+      label,
+      value
+    FROM
+      public._CTIAS_META_IOC
+    WHERE
+      to_tsvector('english', value) @@ to_tsquery(<%= keyword?`'${keyword}:*'`:`''` %>)
+
+  label:
+    count: |
+      SELECT
+        label,
+        count(label) AS cnt
+      FROM
+        public._CTIAS_META_IOC
+      WHERE
+        to_tsvector('english', value) @@ to_tsquery(<%= keyword?`'${keyword}:*'`:`''` %>)
+      GROUP BY
+        label
+
+  latest: |
+    select
+      keyword
+    from
+      _CTIAS_INTERNAL_KEYWORD
+    order by
+      last_use_ts desc
+    limit 10
+
+pattern:
+  similar: |
+    SELECT
+      *
+    FROM
+      public._CTIAS_INTERNAL_SEARCH_PATTERN
+    WHERE
+      to_tsvector('english', pattern_signature) @@ to_tsquery(<%= pattern_str?`'${pattern_str}:*'`:`''` %>)
+    ORDER BY
+      ts_rank_cd(to_tsvector('english', pattern_signature),to_tsquery(<%= pattern_str?`'${pattern_str}:*'`:`''` %>)) DESC
+
+
+  latest:
+    root: |
+      SELECT
+        owner,
+        ts,
+        last_use_ts,
+        pattern,
+        keyword,
+        label,
+        pinned
+      FROM
+        public._CTIAS_INTERNAL_SEARCH_PATTERN
+      ORDER BY
+        last_use_ts DESC
+      LIMIT 10
+
+    keyword: |
+      SELECT
+        pattern
+      FROM
+        public._CTIAS_INTERNAL_SEARCH_PATTERN
+      WHERE
+        keyword @> ARRAY[$1]
+      ORDER BY
+        last_use_ts DESC
+      LIMIT 10
+
+  recommend: |
+    SELECT
+
+    FROM
+
+
+
+
+proto:
+  search:
+    ioc:
+      similar:
+        MATCH (a:ioc)
+        WHERE a.type = $1
+        AND a.value =~ <%= regxVal?`'${regxVal}'`:`''` %>
+        WITH id(a) AS id, label(a) AS label, a.value as val, cti_str_similarity($2,to_string(a.value)) as sim
+        ORDER BY sim DESC LIMIT 1
+        RETURN val,sim,id,label
+
+    test: |
+      MATCH (a) RETURN count(a) AS cnt
+
+
+
+    # todo: email_address domain file ip  이거만 label 에 있는게 맞는지 확인 필요
+    keyword: |
+      SELECT DISTINCT type, value
+      FROM   public.cti_info
+      WHERE  to_tsvector('english', value) @@ to_tsquery(<%= keyword?`'${keyword}:*'`:`''` %>)
+
+    metagraph: |
+      SELECT
+            s_name,
+            t_name,
+            e_name
+      FROM
+          -- 2.1 version에서 안되는 테이블 ag_graphmeta_view
+           public.ag_graphmeta_view_temp
+      -- where
+            -- graphname = 'ctias'
+            -- and "end" not like '%_temp'
+            -- "end" not like '%_temp'
+
+    graph:
+      root: |
+        MATCH p=<%= matchClause %>
+        <%= whereClause ? `WHERE 1=1 ${whereClause} `: `` %>
+        RETURN p
+        LIMIT 10
+
+      single: |
+        MATCH <%= matchClause %>
+        <%= whereClause ? `WHERE 1=1 ${whereClause} `: `` %>
+        RETURN a
+
+      expand: |
+        MATCH p=(a:<%= label %>)-[r]-(b)
+        WHERE id(a) = <%= id %>
+        AND   label(b) <> 'spam_sniper_temp' AND label(b) <> 'ddei_temp'
+        RETURN p
+        LIMIT 10
+
+      expand_info: |
+        WITH res AS (
+            MATCH (a:<%= label %>)-[r]-(b)
+            WHERE id(a) = <%= id %>
+            AND   label(b) <> 'spam_sniper_temp' AND label(b) <> 'ddei_temp'
+            RETURN DISTINCT type(r) AS edge
+                         ,  label(b) AS node
+                         ,  count(b) AS cnt
+        )
+        SELECT * FROM res
+
+      similar: |
+        WITH res AS (
+          MATCH (a:<%= label %>), (b:<%= label %>)
+          WHERE id(a) = $1
+          AND id(a) <> id(b)
+          RETURN a, b
+        )
+        SELECT
+               res.a AS source_vertex
+            ,  res.b AS target_vertex
+            ,  id(res.a) AS source_id
+            ,  id(res.b) AS target_id
+            ,  'similar_to' AS edge_label
+        FROM res WHERE <%= similarClause ? similarClause : `1=1` %> LIMIT 5
+
+      meta:
+        stat: |
+          SELECT res.label
+              ,  res.attr_name
+              ,  res.attr_type
+              ,  res.enum
+          FROM   cti_meta_props res
+          WHERE  res.label = $1
+
+    similarity:
+      string: |
+        SELECT cti_str_similarity($1,$2)
+
+      ip: |
+        SELECT abs(ipv4_to_int($1)-ipv4_to_int($2)) AS ip_similarity
+
+      email: |
+        SELECT cti_str_similarity($1,$2) AS email_name_similarity, cti_str_similarity($3,$4) AS email_domain_similarity
+
+      location: |
+        MATCH  (a:location)-[:has_city]->(b:location)
+        WHERE  toLower(b.value) IN [$1,$2]
+        RETURN DISTINCT a.value AS location_similarity
+
+      property: |
+        MATCH (a<%= label ? `:${label})`: `)`%>-[r]->(b) WHERE a.value = $1
+        AND label(b) <> 'ip' AND label(b) <> 'domain' AND label(b) <> 'hash'
+        RETURN id(b) AS non_seed_ids ORDER BY non_seed_ids
+
+  scheduler:
+    similar:
+      ip: |
+        MATCH (a:ip), (b:ip)
+        WHERE id(b) <> id(a)
+        AND NOT EXISTS ((a)-[:similar_to]->(b))
+        WITH a,b,abs(ipv4_to_int(to_string(a.value))-ipv4_to_int(to_string(b.value))) AS ip_similarity
+        WHERE to_jsonb(ip_similarity) <= 256
+        CREATE (a)-[:similar_to {weight:1.0}]->(b)
+
+      domain: |
+        MATCH (a:domain), (b:domain)
+        WHERE id(b) <> id(a)
+        AND NOT EXISTS ((a)-[:similar_to]->(b))
+        WITH a,b,cti_str_similarity(to_string(a.value),to_string(b.value)) AS str_similarity
+        WHERE to_jsonb(str_similarity) >= 0.75
+        CREATE (a)-[:similar_to {weight:str_similarity}]->(b)
+
+      file: |
+        MATCH (a:file), (b:file)
+        WHERE id(b) <> id(a)
+        AND NOT EXISTS ((a)-[:similar_to]->(b))
+        WITH a,b,cti_str_similarity(to_string(a.name),to_string(b.name)) AS str_similarity
+        WHERE to_jsonb(str_similarity) >= 0.75
+        CREATE (a)-[:similar_to {weight:str_similarity}]->(b)
+
+      email_addr: |
+        MATCH (a:email_address), (b:email_address)
+        WHERE id(b) <> id(a)
+        AND NOT EXISTS ((a)-[:similar_to]->(b))
+        WITH a,b,cti_str_similarity(split_part(to_string(a.value),to_string('@'),to_int(1)),split_part(to_string(b.value),to_string('@'),to_int(1)))*0.9+cti_str_similarity(split_part(to_string(a.value),to_string('@'),to_int(2)),split_part(to_string(b.value),to_string('@'),to_int(2)))*0.1 AS email_similarity
+        WHERE to_jsonb(email_similarity) >= 0.75
+        CREATE (a)-[:similar_to {weight:email_similarity}]->(b)
+
+  ioc:
+    indicator:
+      MATCH (a:indicator)
+      RETURN id(a) AS id, a.ip_list AS ip_list, a.domain_list AS domain_list, a.hash_list AS hash_list, a.email_list AS email_list
+
+    vertex:
+      MATCH (a:indicator), (b:network_info)
+      WHERE id(a) = <%= id %>::graphid
+      AND b.source_ip = <%= ip ? `'${ip}'` :`` %>
+      WITH a, b
+      MERGE (a)-[:indicates]->(b)
+
+api:
+  search:
+    result:
+      table: |
+        <%= label ?  `MATCH (a:${label} )-[r]->(b) `  :   ` MATCH (a)-[r]->(b) `  %>
+                WHERE  label(b) <> 'groups'
+                AND    label(b) <> 'indicator'
+              AND    a.value = $1
+              RETURN
+                      label(b) AS label
+                    , b.cid AS cid
+                    , b.value AS value
+                    , b.created AS created
+                    , b.description AS description
+              UNION
+        <%= label ?  `MATCH (a:${label} )<-[r]-(b) `  :   ` MATCH (a)<-[r]-(b) `  %>
+              WHERE  label(b) <> 'groups'
+              AND    label(b) <> 'indicator'
+              AND    a.value = $1
+              RETURN
+                      label(b) AS label
+                    , b.cid AS cid
+                    , b.value AS value
+                    , b.created AS created
+                    , b.description AS description
+    group:
+      # ClassifierSearchService.doQueryAttackerGrpGraph 아직
+      graph: |
+        SELECT unnest(a.graph_id) AS res
+        FROM cti_attack_cluster a,
+            (SELECT array_remove(array_agg(DISTINCT graph.int_set1) || array_agg(DISTINCT graph.int_set2),null) AS target
+             FROM (
+                    MATCH (a:intrusion_set)-[r1:has_indicator]->(b:indicator)-[r2:indicates]->(src)
+                    WHERE src.value = $1
+                    WITH a
+                    MATCH (a)-[r1:has_indicator]->(b:indicator)-[r2:indicates]->(c)
+                    OPTIONAL MATCH (c)<-[r3:indicates]-(d:indicator)-[r4:has_indicator]-(e:intrusion_set)
+                    WHERE id(a) <> id(e) AND id(b) <> id(d)
+                     RETURN DISTINCT id(a) AS int_set1, id(e) AS int_set2
+            ) graph ) b
+        WHERE a.graph_id && b.target
+
+      graph1: |
+        WITH res AS (MATCH  (n)
+                     WHERE  id(n) = $1
+                     AND    label(n) IN ['intrusion_set','person','company_info','isp','location','cve_code','tool']
+                     RETURN n)
+        SELECT * FROM res
+
+
+
+
+    campaign:
+      #  ClassifierSearchService.doQueryCampaignGraph
+      graph: |
+        MATCH (a:intrusion_set)-[r1:has_indicator]->(b:indicator)-[r2:indicates]->(src)
+        WHERE src.value = $1
+        WITH a
+        MATCH (a)-[r1:has_indicator]->(b:indicator)-[r2:indicates]->(c)
+        WHERE label(c) IN ['ip','domain','email']
+        OPTIONAL MATCH (c)<-[r3:indicates]-(d:indicator)-[r4:has_indicator]-(e:intrusion_set)
+        WHERE id(a) <> id(e) AND id(b) <> id(d)
+        RETURN *
+
+    # ClassifierSearchService.doQueryAttackPattern
+    pattern:
+      root: |
+        SELECT
+               gid AS intrusion_set_id
+            ,  gname AS intrusion_set_name
+            ,  id AS attack_pattern_id
+            ,  name AS attack_pattern_name
+            ,  created
+            ,  modified
+            ,  kill_chain_phases
+            ,  platforms
+        FROM   mitre_attack_pattern
+        WHERE  gname = $1
+      graph: |
+        SELECT
+               a.intrusion_set_gid
+            ,  a.intrusion_set_name
+            ,  a.malware_gid
+            ,  a.malware_type
+            ,  a.malware_hash
+        FROM   cti_attack_pattern a,
+        (MATCH (a:intrusion_set)-[r1:has_indicator]->(b:indicator)-[r2:indicates]->(c)
+         WHERE c.value = $1
+         RETURN id(a) AS intrusion_set_id) graph
+        WHERE  a.intrusion_set_gid = graph.intrusion_set_id
+
+      graph2: |
+        WITH malware_code as (
+          SELECT  *
+            FROM    (
+                    VALUES
+                    ('backdoor',0),
+                    ('downloader',1),
+                    ('dropper',2),
+                    ('hacktool',3),
+                    ('injector',4),
+                    ('keylogger',5),
+                    ('msil',6),
+                    ('remoteadmin',7),
+                    ('rootkit',8),
+                    ('wiper',9)
+            ) AS q (name, code)
+        ),graph as (
+          MATCH (a:intrusion_set)-[r1:has_indicator]->(b:indicator)-[r2:indicates]->(c)
+          WHERE c.value = $1
+          RETURN id(a) AS intrusion_set_id
+        ), atk_ptn as (
+          SELECT
+            a.intrusion_set_gid
+            ,a.intrusion_set_name
+            ,array_agg( json_build_object(
+              'gid', a.malware_gid,
+              'type', a.malware_type,
+              'code',malware_code.code,
+              'hash', a.malware_hash
+            ) ) as malware_list
+          FROM
+               cti_attack_pattern a,
+               graph,
+               malware_code
+          WHERE
+            a.intrusion_set_gid = graph.intrusion_set_id
+            and  malware_code.name = a.malware_type
+          group by
+            a.intrusion_set_gid
+            ,a.intrusion_set_name
+        )
+        SELECT *
+        FROM atk_ptn
+
+    cti:
+      # CtiSearchService.doQueryCtiInfo
+      info: |
+        WITH res AS (MATCH p=<%= matchPath %>
+        WHERE <%= whereClause %>
+        RETURN p)
+        SELECT * FROM res
+
+      node:
+        # CtiSearchService.doQueryCtibyPattern
+        pattern: |
+          WITH res AS (
+            MATCH p=<%= matchPath %>
+            <%= whereClause !== null ? `WHERE ${whereClause} `: ''  %>
+            RETURN p, length(p) AS len
+          )
+          SELECT * FROM res
+
+        # CtiSearchService.doQueryCtibyValue
+        other: |
+          WITH res AS (
+            MATCH <%= matchPath %>
+            WHERE <%= whereClause %>
+            RETURN *
+          )
+          SELECT * FROM res
+
+      find:
+        # CtiSearchService.doFindGraphId
+        graphid: |
+          WITH res AS (MATCH <%= label ? `(n:${label}) ` : ` (n) `%>
+          WHERE n.value = $1 RETURN id(n) AS graph_id)
+          SELECT * FROM res
+
+        # CtiSearchService.doFindClusterId
+        clusterid: |
+          SELECT cluster_id FROM cti_attack_cluster WHERE graph_id::TEXT[] @> ARRAY[$1]
+
+        # SAnalysisService.doFindSimilarNode
+        root: |
+          <% if(label && value && regexp) { %>
+            MATCH (a:<%= label %>) WHERE a.value =~ $1
+            WITH a , cti_str_similarity(to_string($2),to_string(a.value)) as sim
+            RETURN id(a) as id, a.value AS val, sim
+          <% }else if(label && value && !regexp) {%>
+            MATCH (a:<%= label %>) WHERE a.value = $2
+            RETURN id(a) as id, a.value AS val, 1 AS sim
+          <% } %>
+            ORDER BY SIM DESC
+            LIMIT 1
+      rank:
+        # RankSearchService.getBwRankInfo, getPageRankInfo
+        query: |
+          SELECT   t.node_id::text AS node_id
+                ,  t.rank_value::float  AS rank_value
+                ,  (MATCH (a) WHERE id(a) = t.node_id RETURN a.value)::text AS node_value
+          FROM     <%= algoOption === 1 ? ` cti_page_rank($1) t ` : ` cti_bw_centrality($1) t ` %>
+          ORDER BY t.rank_value DESC
+
+      similarity:
+        # SAnalysisService.doSingleValueSimilarity
+        string: |
+          SELECT cti_str_similarity($1,$2)
+
+        ip: |
+          SELECT abs(ipv4_to_int($1)-ipv4_to_int($2)) AS ip_similarity
+
+        email: |
+          SELECT cti_str_similarity($1,$2) AS email_name_similarity, cti_str_similarity($3,$4) AS email_domain_similarity
+
+        location: |
+          MATCH  (a:location)-[:has_city]->(b:location)
+          WHERE  toLower(b.value) IN [$1,$2]
+          RETURN DISTINCT a.value AS location_similarity
+
+        property: |
+          MATCH (a<%= label ? `:${label})`: `)`%>-[r]->(b) WHERE a.value = $1
+          AND label(b) <> 'ip' AND label(b) <> 'domain' AND label(b) <> 'hash'
+          RETURN id(b) AS non_seed_ids ORDER BY non_seed_ids
+
+        multi: |
+          SAnalysisService.doMultiValueSimilartiy
+
+    cluster:
+      #  ClassifierSearchService.doQueryAttackerCluster
+      root: |
+        SELECT unnest(a.graph_id) AS res
+        FROM   cti_attack_cluster a
+        WHERE  a.cluster_id = $1::int
+
+      root2: |
+        MATCH (n)
+        WHERE id(n) = $1
+        RETURN n
+
+      # ClassifierSearchService.doQueryClusterGraph
+      graph: |
+        MATCH  (n)
+        WHERE  n.value = $1
+        RETURN n
+
+      graph2: |
+        SELECT cluster_id
+        FROM   cti_attack_cluster
+        WHERE  graph_id @> ARRAY[ graphid($1) ]
+
+      # ClassifierSearchService.doQueryClusterDetailsGraph
+      details: |
+        SELECT unnest(cac.graph_id) AS res
+        FROM   cti_attack_cluster cac,
+               (MATCH (m)
+               WHERE  m.value = $1
+               RETURN DISTINCT array_agg(id(m)) AS target_id) v
+        WHERE  cac.graph_id @> v.target_id
+
+      # todo : 해야할 거
+      level: |
+        ClassifierSearchService.doQueryClusterLevelGraph
+
+    summary:
+      # SummarySearchService.doFindCampaignName
+      campaign: |
+        MATCH (a:intrusion_set) WHERE to_jsonb(id(a))=(SELECT to_jsonb(graph_id[1]) FROM cti_attack_cluster WHERE cluster_id=$1::int)
+        RETURN a.name AS campaign_name, a.description AS campaign_desc
+
+      # SummarySearchService.doQueryEntropy
+      entropy: |
+        SELECT cluster_id,to_char(extracted_time,'YYYYMMdd') AS date,incremented_cnt FROM cti_graph_entropy WHERE cluster_id=$1::int ORDER BY date
+
+      # SummarySearchService.doQueryAttackType
+      attacktype: |
+        SELECT malware_type,count(malware_type) FROM cti_attack_pattern
+        WHERE intrusion_set_name=$1
+        GROUP BY malware_type
+
+      # SummarySearchService.doQueryClusterSize
+      size: |
+        SELECT array_length(graph_id,1) AS cluster_size FROM cti_attack_cluster WHERE cluster_id=$1::int
+
+      # SummarySearchService.doQueryCtiType
+      ctitype: |
+        SELECT label,count(label)
+        FROM (
+          MATCH (n<%= label ? `:${label}`: `` %>)-[]->(m) WHERE n.value=$1
+          AND label(m) <> 'groups' AND label(m) <> 'indicator'
+          RETURN label(m) AS label
+          UNION ALL
+          MATCH (n<%= label ? `:${label}`: `` %>)<-[]-(m) WHERE n.value=$1
+          AND label(m) <> 'groups' AND label(m) <> 'indicator'
+          RETURN label(m) AS label
+        ) a
+        GROUP BY label

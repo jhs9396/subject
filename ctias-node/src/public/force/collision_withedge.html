@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>no force</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.1/d3.min.js"></script>
+    <style>
+        html, body, #container {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            border: 0px;
+            overflow: hidden;
+        }
+    </style>
+
+</head>
+<body>
+<div id="container">
+    <svg width="100%" height="100%">
+        <g class="main"    >
+            <g class="edgesGrp"></g>
+
+            <g class="vertexGrp"></g>
+        </g>
+    </svg>
+</div>
+</body>
+<script>
+    let color = d3.scaleOrdinal(d3.schemeCategory10)
+    let force01 = d3.forceSimulation();
+    force01.stop()
+
+    let xForce = d3.forceX(d=>d.group*100)
+    let yForce = d3.forceY(300)
+
+
+    let collisionForce = d3.forceCollide();
+    collisionForce.radius(12)
+
+    let edgeForce = d3.forceLink().id(d=>d.id);
+
+
+    force01.force('x',xForce)
+    force01.force('y',yForce)
+    force01.force('collision',collisionForce )
+    force01.force('linkforce',edgeForce )
+
+
+    window.addEventListener('load',()=>{
+        force01.on('tick', tickFunc)
+
+        d3.json('../data/miserables.json').then(json=>{
+            force01.nodes(json.nodes, d=>d.id)
+
+            edgeForce.links(json.links)
+            force01.tick(10)
+            tickFunc()
+            force01.restart()
+        })
+    })
+
+
+
+    function tickFunc() {
+
+        // console.log(data.nodes[1])
+
+        let vertexSelection = d3.select('.vertexGrp').selectAll('circle').data(force01.nodes(), d=>d.id)
+        vertexSelection.enter().append('circle')
+            .attr('cx',d=>d.x)
+            .attr('cy',d=>d.y)
+            .attr('fill',d=>color(d.group))
+            .attr('r',10)
+
+        vertexSelection
+            .attr('cx',d=>d.x)
+            .attr('cy',d=>d.y)
+
+
+
+
+        let edgeSelection = d3.select('.edgesGrp').selectAll('path').data(edgeForce.links(), d=>d.id)
+        edgeSelection.enter().append('line')
+            .attr('cx',d=>d.x)
+            .attr('cy',d=>d.y)
+            .attr('fill',d=>color(d.group))
+            .attr('r',10)
+
+        edgeSelection
+            .attr('cx',d=>d.x)
+            .attr('cy',d=>d.y)
+
+    }
+
+</script>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>no force</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.1/d3.min.js"></script>
+    <style>
+        html, body, #container {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            border: 0px;
+            overflow: hidden;
+        }
+    </style>
+
+</head>
+<body>
+<div id="container">
+    <svg width="100%" height="100%">
+        <g class="main"    >
+            <g class="edgesGrp"></g>
+
+            <g class="vertexGrp"></g>
+        </g>
+    </svg>
+</div>
+</body>
+<script>
+    let force01 = d3.forceSimulation();
+    force01.stop()
+
+    let xForce = d3.forceX(d=>d.group*100)
+    let yForce = d3.forceY(300)
+
+
+    let collisionForce = d3.forceCollide();
+    collisionForce.radius(12)
+
+
+    force01.force('x',xForce)
+    force01.force('y',yForce)
+    force01.force('collision',collisionForce )
+
+
+    window.addEventListener('load',()=>{
+        force01.on('tick', tickFunc)
+
+        d3.json('../data/miserables.json').then(json=>{
+            // console.log('json', json)
+
+            //data = json
+
+            force01.nodes(json.nodes, d=>d.id)
+            force01.tick(10)
+            tickFunc()
+            force01.restart()
+        })
+    })
+
+    function tickFunc() {
+
+        // console.log(data.nodes[1])
+
+        let vertexSelection = d3.select('.vertexGrp').selectAll('circle').data(force01.nodes(), d=>d.id)
+        vertexSelection.enter().append('circle')
+            .attr('cx',d=>d.x)
+            .attr('cy',d=>d.y)
+            .attr('r',10)
+
+        vertexSelection
+            .attr('cx',d=>d.x)
+            .attr('cy',d=>d.y)
+    }
+
+</script>
+</html>

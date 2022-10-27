@@ -1,0 +1,20 @@
+input GraphInput {
+    name: String
+}
+
+type Node {
+    label: String
+    name: String
+    radius: Int
+    color: String
+}
+
+type Edge {
+    source: String
+    target: String
+}
+
+type GraphOutput {
+    nodes: [Node]
+    edges: [Edge]
+}

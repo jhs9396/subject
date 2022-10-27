@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+</head>
+<body>
+<script>
+    // 8 ==> x,y,z,size,color,
+    let bufSize = 4 * 8 * (1024 * 1024)
+    var buffer = new SharedArrayBuffer(bufSize)
+    var f32 = new Float32Array(buffer)
+
+    for(i=0;i<bufSize/4;i++) {
+        f32[i] = i*0.1
+    }
+
+    console.log(f32[0], f32[bufSize-1])
+
+
+</script>
+</body>
+</html>

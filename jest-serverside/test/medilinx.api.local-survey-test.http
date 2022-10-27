@@ -1,0 +1,104 @@
+POST http://192.168.2.87/api/medilinx/v1/survey/register
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAok+574iTllDbuYLmYgHJqSsp6fyEi7HtrMBp/qybGtIsFkf+tLXkpkneSD4r+q33Zo5f8+WgcV31SToeBBe+RHj87/GHyBNx+TxI5Urt+VBOQ==
+
+[{
+  "hosId": "2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178",
+  "visitDate": "20220629",
+  "chartNo": "11223334",
+  "name": "전현수",
+  "birthday": "1988-12-01",
+  "age": 35,
+  "gender": "M",
+  "phoneNo": "01077049885",
+  "healthPersonal": "Y",
+  "cancer": "Y",
+  "healthCompany": "N",
+  "healthCompre": "N",
+  "lifestyle": "N",
+  "dementia": "N",
+  "depression": "N",
+  "seniorHealth": "N",
+  "nutrition": "N",
+  "vascular": "N",
+  "jobstress": "N",
+  "dental": "N",
+  "healthSpecial": "N",
+  "nightshift": "N",
+  "radiation": "N",
+  "gumType": "X1"
+}]
+
+### update
+POST http://192.168.2.87/api/medilinx/v1/survey/update
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAok+574iTllDbuYLmYgHJqSsp6fyEi7HtrMBp/qybGtIsFkf+tLXkpkneSD4r+q33Zo5f8+WgcV31SToeBBe+RHj87/GHyBNx+TxI5Urt+VBOQ==
+
+[{
+"hosId": "2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178",
+"visitDate": "20220613",
+"chartNo": "887744",
+"name": "전현수",
+"birthday": "1988-12-01",
+"age": 35,
+"gender": "M",
+"phoneNo": "01077049885",
+"healthPersonal": "Y",
+"cancer": "Y",
+"healthCompany": "N",
+"healthCompre": "N",
+"lifestyle": "N",
+"dementia": "N",
+"depression": "N",
+"seniorHealth": "N",
+"nutrition": "N",
+"vascular": "N",
+"jobstress": "N",
+"dental": "N",
+"healthSpecial": "N",
+"nightshift": "N",
+"radiation": "N",
+"gumType": "A1"
+}]
+
+### 취소 API
+POST http://localhost:4000/medilinx/v1/survey/cancel
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAok+574iTllDbuYLmYgHJqSsp6fyEi7HtrMBp/qybGtIsFkf+tLXkpkneSD4r+q33Zo5f8+WgcV31SToeBBe+RHj87/GHyBNx+TxI5Urt+VBOQ==
+
+[{
+"hosId": "2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178",
+"visitDate": "20220629",
+"chartNo": "112233342",
+"name": "전현수",
+"birthday": "1988-12-01",
+"age": 35,
+"gender": "M",
+"phoneNo": "01077049885"
+}]
+
+### 문진 답변 조회 (씨젠 API)
+POST http://localhost:4000/medilinx/v1/survey/answer
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAok+574iTllDbuYLmYgHJqSsp6fyEi7HtrMBp/qybGtIsFkf+tLXkpkneSD4r+q33Zo5f8+WgcV31SToeBBe+RHj87/GHyBNx+TxI5Urt+VBOQ==
+
+[{
+  "hosId": "2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178",
+  "chartNo": "887744",
+  "visitDate": "20220612",
+  "name": "전현수",
+  "birthday": "881201"
+}]
+
+### 문진 답변 조회 (씨젠 API)
+POST http://localhost:4000/medilinx/v1/survey/status
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAok+574iTllDbuYLmYgHJqSsp6fyEi7HtrMBp/qybGtIsFkf+tLXkpkneSD4r+q33Zo5f8+WgcV31SToeBBe+RHj87/GHyBNx+TxI5Urt+VBOQ==
+
+{
+  "hosId": "2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178",
+  "chartNo": "887744",
+  "visitDate": "20220612",
+  "name": "전현수",
+  "birthday": "881201"
+}

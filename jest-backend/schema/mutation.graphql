@@ -1,0 +1,9 @@
+type Mutation {
+    createOrganization(organizationInput: OrganizationInput!): OrganizationOutput
+    updateOrganization(name: String!, organizationInput: OrganizationInput!): OrganizationOutput
+    deleteOrganization(name: String!): OrganizationOutput
+
+    createWorker(workerInput: WorkerInput!): WorkerOutput
+    updateWorker(name: String!, workerInput: WorkerInput!): WorkerOutput
+    deleteWorker(name: String!): WorkerOutput
+}

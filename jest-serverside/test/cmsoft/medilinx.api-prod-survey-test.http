@@ -1,0 +1,169 @@
+### 문진 등록 (씨엠 API)
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/register
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJGqO0If1Sb3SIUYZpCidi6SqLfC5FC3p9JZgt55SCJy77wQwYti/aWLVJzDxFnFFL63jJwirNFTMXo+xCt+kWOgxAZAeeTcGcXRIIvxPDZat
+
+[{
+  "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+  "visitDate": "20220630",
+  "chartNo": "11556677",
+  "name": "전현수",
+  "birthday": "1988-12-01",
+  "age": 33,
+  "gender": "M",
+  "phoneNo": "01077049885",
+  "healthPersonal": "Y",
+  "cancer": "Y",
+  "healthCompany": "N",
+  "healthCompre": "N",
+  "lifestyle": "N",
+  "dementia": "N",
+  "depression": "N",
+  "seniorHealth": "N",
+  "nutrition": "N",
+  "vascular": "N",
+  "jobstress": "N",
+  "dental": "N",
+  "healthSpecial": "N",
+  "nightshift": "N",
+  "radiation": "N",
+  "gumType": "A1"
+}]
+
+### 취소 API
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/cancel
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJGqO0If1Sb3SIUYZpCidi6SqLfC5FC3p9JZgt55SCJy77wQwYti/aWLVJzDxFnFFL63jJwirNFTMXo+xCt+kWOgxAZAeeTcGcXRIIvxPDZat
+
+[{
+  "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+  "visitDate": "20220630",
+  "chartNo": "11556677",
+  "name": "전현수",
+  "birthday": "1988-12-01",
+  "age": 33,
+  "gender": "M",
+  "phoneNo": "01077049885"
+}]
+
+### update
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/update
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJGqO0If1Sb3SIUYZpCidi6SqLfC5FC3p9JZgt55SCJy77wQwYti/aWLVJzDxFnFFL63jJwirNFTMXo+xCt+kWOgxAZAeeTcGcXRIIvxPDZat
+
+[{
+  "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+  "visitDate": "20220613",
+  "chartNo": "998877",
+  "name": "전테스트",
+  "birthday": "881201",
+  "age": 33,
+  "gender": "M",
+  "phoneNo": "01077049885",
+  "healthPersonal": "Y",
+  "cancer": "Y",
+  "healthCompany": "N",
+  "healthCompre": "N",
+  "lifestyle": "N",
+  "dementia": "N",
+  "depression": "N",
+  "seniorHealth": "N",
+  "nutrition": "N",
+  "vascular": "N",
+  "jobstress": "N",
+  "dental": "N",
+  "healthSpecial": "N",
+  "nightshift": "N",
+  "radiation": "N",
+  "gumType": "X1"
+}]
+
+
+### 문진 상태 조회 (씨엠 API)
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/status
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJGqO0If1Sb3SIUYZpCidi6SqLfC5FC3p9JZgt55SCJy77wQwYti/aWLVJzDxFnFFL63jJwirNFTMXo+xCt+kWOgxAZAeeTcGcXRIIvxPDZat
+
+{
+  "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+  "chartNo": "998822"
+}
+
+
+### 문진 답변 조회 (씨엠 API)
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/answer
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJGqO0If1Sb3SIUYZpCidi6SqLfC5FC3p9JZgt55SCJy77wQwYti/aWLVJzDxFnFFL63jJwirNFTMXo+xCt+kWOgxAZAeeTcGcXRIIvxPDZat
+
+{
+  "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+  "chartNo": "998822"
+}
+
+
+### 문진 답변 조회 (씨젠 API)
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/answer
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJI7DUD2aUFeRlhV0eOzgt4f3Mz2GZ5xKlX/BQd5n3YmB8Nn9IIUP7RoQZCm/35O/BHgJXF3WHt3O5cGPhDKM8oBJRzdwN4K8+kmpTFIJTB4+
+
+[{
+  "hosId": "AEA0F1DF3B0D5CA6905FD409DCEFEB6354A33645540FF4A4C71B55EB29F5CEF3",
+  "chartNo": "00000008",
+  "visitDate": "20220701",
+  "name": "양대율",
+  "birthday": "19840815"
+}]
+
+### 문진 상태 조회 (씨엠 API)
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/status
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJI7DUD2aUFeRlhV0eOzgt4f3Mz2GZ5xKlX/BQd5n3YmB8Nn9IIUP7RoQZCm/35O/BHgJXF3WHt3O5cGPhDKM8oBJRzdwN4K8+kmpTFIJTB4+
+
+{
+  "hosId": "AEA0F1DF3B0D5CA6905FD409DCEFEB6354A33645540FF4A4C71B55EB29F5CEF3",
+  "chartNo": "00000008",
+  "visitDate": "20220701",
+  "name": "양대율",
+  "birthday": "19840815"
+}
+
+
+### 문진 답변 조회 (씨젠 API)
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/answer
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJGqO0If1Sb3SIUYZpCidi6SqLfC5FC3p9JZgt55SCJy77wQwYti/aWLVJzDxFnFFL63jJwirNFTMXo+xCt+kWOgxAZAeeTcGcXRIIvxPDZat
+
+[{
+  "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+  "chartNo": "998822",
+  "visitDate": "20220530",
+  "name": "김테스트",
+  "birthday": "771222"
+}]
+
+### 문진 답변 조회 (씨젠 API)
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/answer
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJI7DUD2aUFeRlhV0eOzgt4f3Mz2GZ5xKlX/BQd5n3YmB8Nn9IIUP7RoQZCm/35O/BHgJXF3WHt3O5cGPhDKM8oBJRzdwN4K8+kmpTFIJTB4+
+
+[{
+  "hosId": "AEA0F1DF3B0D5CA6905FD409DCEFEB6354A33645540FF4A4C71B55EB29F5CEF3",
+  "chartNo": "998822",
+  "visitDate": "20220530",
+  "name": "김테스트",
+  "birthday": "771222"
+}]
+
+
+### 문진 답변 조회 (씨엠 API)
+POST https://partner.medilinx.co.kr/api/medilinx/v1/survey/answer
+Content-Type: application/json; boundary=WebAppBoundary
+Authorization: Bearer rUc+T6bHoS8P5yjmqpUfiSaeSgJvItoz0uaSzR2Kz/bC2n2uZaLrbi3CIp7TzymnkqkERaIQz31hOZaKBTatJGqO0If1Sb3SIUYZpCidi6SqLfC5FC3p9JZgt55SCJy77wQwYti/aWLVJzDxFnFFL63jJwirNFTMXo+xCt+kWOgxAZAeeTcGcXRIIvxPDZat
+
+[{
+  "hosId": "23447EFDEEA24F9529C99A5E06E711EEAD1AC43DCC4256BC45070D21A59E5847",
+  "chartNo": "998877",
+  "visitDate": "20220530",
+  "name": "전테스트",
+  "birthday": "881201"
+}]

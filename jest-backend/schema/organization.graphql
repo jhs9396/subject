@@ -1,0 +1,12 @@
+input OrganizationInput {
+    name: String
+    location: String
+    phoneNo: Int
+}
+
+type OrganizationOutput {
+    name: String
+    location: String,
+    phoneNo: Int
+    workers: [WorkerOutput]
+}

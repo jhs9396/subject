@@ -1,0 +1,77 @@
+@startuml
+
+hide circle
+hide empty members
+
+entity _CTIAS_INTERNAL_KEYWORD {
+    + keyword [text] PRIMARY KEY
+    owner [text]
+    ts [timestamp]
+    last_use_ts ts [timestamp]
+}
+
+
+entity _CTIAS_INTERNAL_SEARCH_PATTERN {
+    owner [text]
+    ts  [timestamp]
+    last_use_ts [timestamp]
+    pattern_signature [text]
+    pattern [jsonb[]]
+    pattern_param [jsonb[]]
+    keyword [text[]]
+    label  [text[]]
+    pinned [boolean]
+}
+
+
+entity _CTIAS_META_ATTR_BY_LABEL {
+    graph_type [graph_type]
+    label [text]
+    attr_name [text]
+    attr_type [attr_type]
+    enum [text[]]
+}
+
+
+entity _USER_ACTION_LOG {
+    user_id
+    page_id
+    component_id
+    action_type  'expand'
+    action_rel_graphids gid[]
+    action_etc_info
+}
+
+entity _USER_DEFINED_FILTER {
+    creator_id
+    target_label
+    filter_name
+    filter_logic
+    filter_params
+    tag
+}
+
+
+note as n1
+    create type graph_type as enum('vertex','edge');
+    create type attr_type as enum('numeric','text', 'date', 'boolean','integer');
+end note
+
+
+
+
+'
+'
+'' zero or one
+'A |o--o| B
+'
+'' exactly one
+'C ||--|| D
+'
+'' zero or many
+'E }o--o{ F
+'
+'' one or many
+'G }|--|{ H
+
+@enduml

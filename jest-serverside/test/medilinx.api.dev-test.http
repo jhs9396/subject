@@ -1,0 +1,38 @@
+### KRAKEN REST API checkup register
+
+POST http://192.168.2.87:4000/medilinx/v1/checkup/register
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer cIZn1YacssssDQHNNE3bEZDphmg1FasKJ2FowXFUAok+574iTllDbuYLmYgHJqSsp6fyEi7HtrMBp/qybGtIsFkf+tLXkpkneSD4r+q33Zo5f8+WgcV31SToeBBe+RHj87/GHyBNx+TxI5Urt+VBOQ==
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="%EB%A7%88%EC%8A%A4%ED%86%A0.pdf";
+
+< C:\Users\hsjeon\Downloads\모바일결과지\테스트\마스토.pdf
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="medilinxCheckupRequestInputList"
+
+[
+    {
+        "hosId": "2CB77104ECC6EC31BED93AA5B08A346B081DF18B128EAB69C63E77EAAD9D9178",
+        "fileNames": ["마스토.pdf"],
+        "name": "왕은영",
+        "birthday": "920616",
+        "chartNo": "7831372",
+        "age": 15,
+        "gender": "F",
+        "phoneNo": "01077049885",
+        "email": "jhs@peernine.co.kr",
+        "recipientName": null,
+        "recipientBirthday": null,
+        "recipientPhoneNo": null,
+        "zipcode": "11554",
+        "address1": "서울시",
+        "address2": "양천구",
+        "visitDate": "20220329",
+        "checkupDate": "20220329",
+        "sendAlimtalk": "Y",
+        "sendEmail": "N",
+        "sendPost": "N"
+    }
+]

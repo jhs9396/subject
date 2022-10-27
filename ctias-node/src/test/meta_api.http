@@ -1,0 +1,9 @@
+#### Pattern 기반 조회 결과 그래프 데이터
+POST http://localhost:3000/api/meta/attr
+Accept: application/json, application/hal+json
+Content-Type: application/json
+
+{ "label" : "location" }
+
+###
+

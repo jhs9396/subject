@@ -1,0 +1,112 @@
+a {
+    height: 100%;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+}
+
+button {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+}
+
+button img,
+a img { width: .75rem; }
+
+input {
+    width: 100%;
+    display: block;
+    padding: 0 1rem;
+    border: 0;
+    outline: 0;
+    color: #8e8b8a;
+}
+
+.deep {
+    background: #221714;
+    color: #fff;
+}
+
+.abs { position: absolute; }
+
+.abs[data-name="keywordPath"] { top: 1rem; left: 1rem; }
+.abs[data-name="labelAttr"] { top: 2rem; right: 2rem; }
+
+.border { border: 1px solid #d6d3cd; }
+
+.scroll {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.item { flex: 0 0 auto; }
+
+.box { height: 50px; }
+.box .header { background: #d6d3cd; }
+
+.box .header h3 {
+    font-size: .8em;
+    color: #3c362e;
+}
+
+.box .content { background: #fff; }
+.box.row .header { min-width: 90px; }
+.box.row .content { min-width: 300px; }
+
+.search-box { position: relative; }
+
+.search-box img {
+    width: 1rem;
+    opacity: .3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: .85em;
+    margin: auto;
+}
+
+.path-box { padding: 0 1rem; }
+
+.path-box p {
+    margin-right: 1rem;
+    padding: .4rem .85rem;
+    font-size: .8em;
+}
+
+.path-box p:hover {
+    background: #8e8b8a;
+    border-radius: .325rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.accord .box { height: 35px; opacity: .3; }
+.accord:hover .box { height: 40px; opacity: .6; }
+.accord.on .box { height: 50px; opacity: 1; }
+.accord:first-of-type .box { border-bottom: 0; }
+
+.accord .content { position: relative; }
+
+.card {
+    background: #fff;
+    border-radius: .325rem .325rem 0 0;
+    overflow: hidden;
+}
+
+.card .header { padding: 1rem; border-radius: .325rem .325rem 0 0; }
+
+.card .header { border: 1px solid #d6d3cd; border-bottom: 0; }
+
+table td, table th {
+    padding: .85rem 1rem;
+    border: 1px solid #d6d3cd;
+}
+
+.attr-table tr td:first-child {
+    font-size: .9em;
+    color: #b1afab;
+}
+

@@ -1,0 +1,43 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Cat {
+  age: Int!
+  alias: String
+  name: String!
+}
+
+input CreateCatInput {
+  age: Int!
+  alias: String
+  name: String!
+}
+
+input CreateOwnerInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Mutation {
+  createCat(CreateCatInput: CreateCatInput!): Cat!
+  createOwner(createOwnerInput: CreateOwnerInput!): Owner!
+  removeOwner(id: Int!): Owner!
+  updateOwner(updateOwnerInput: UpdateOwnerInput!): Owner!
+}
+
+type Owner {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Query {
+  cats: [Cat!]!
+  owner(id: Int!): Owner!
+}
+
+input UpdateOwnerInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
