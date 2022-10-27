@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { ICON_DICT } from 'assets/icon';
+import { cloneDeep } from 'lodash';
+import { GraphOptionsType, IGraphEvent } from 'types/components/widget/graph';
+import { GraphType } from 'stores/pages/main/main-interface';
 
 interface IGraph {
-  datum: JavascriptObject;
-  options: JavascriptObject;
-  events: JavascriptObject;
+  datum: GraphType;
+  options: GraphOptionsType;
+  events: IGraphEvent;
 }
 
 function Graph(props: IGraph) {
@@ -14,7 +17,7 @@ function Graph(props: IGraph) {
   const [simulation, setSimulation] = useState(null);
   const [nodeSvg, setNodeSvg] = useState(null);
   const [edgeSvg, setEdgeSvg] = useState(null);
-  const [graphData, setGraphData] = useState(datum);
+  const [graphData, setGraphData] = useState({ nodes: [], edges: [] });
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
 
@@ -88,11 +91,12 @@ function Graph(props: IGraph) {
       .attr('transform', d => `scale(0.03, 0.03) translate(-${ICON_DICT[d].iw / 2},-${ICON_DICT[d].ih / 2})`);
   }, [svg]);
 
-  const calcXY = useCallback((current, min, max) => {
-    if (current < min) return min;
-    if (current > max) return max;
-    return current;
-  }, []);
+  useEffect(() => {
+    if (datum.nodes.length > 0) {
+      setGraphData(cloneDeep({ ...datum }));
+      // setGraphData(JSON.parse(JSON.stringify(datum)));
+    }
+  }, [datum]);
 
   useEffect(() => {
     const aborted = { stat: false };
@@ -134,17 +138,19 @@ function Graph(props: IGraph) {
   useEffect(() => {
     const aborted = { stat: false };
     if (simulation === null || aborted.stat) return;
-
-    simulation
-      .force('charge', d3.forceManyBody().strength(-200))
-      .force(
-        'links',
-        d3.forceLink(edges).id((d: any) => (options.edge.id ? d[options.edge.id] : d.index))
-      )
-      .force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
-    // .force('x', d3.forceX(-100))
-    // .force('y', d3.forceY(-100));
-    simulation.on('tick', tick);
+    const check = simulation.nodes() || [];
+    if (check.length > 0) {
+      simulation
+        .force('charge', d3.forceManyBody().strength(-200))
+        .force(
+          'links',
+          d3.forceLink(edges).id((d: any) => (options.edge.id ? d[options.edge.id] : d.id))
+        )
+        .force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
+      // .force('x', d3.forceX(-100))
+      // .force('y', d3.forceY(-100));
+      simulation.on('tick', tick);
+    }
 
     // eslint-disable-next-line consistent-return
     return () => {
@@ -224,11 +230,7 @@ function Graph(props: IGraph) {
           events.nodeClick(false, {});
         }
         if (events?.nodeExpend) {
-          const { nodes, edges } = events.nodeExpend({ ...d });
-          setGraphData({
-            nodes: [...graphData.nodes, ...nodes],
-            edges: [...graphData.edges, ...edges]
-          });
+          events.nodeExpend({ ...d });
         }
       })
       .on('mouseenter', (event, d) => {
@@ -249,6 +251,30 @@ function Graph(props: IGraph) {
       aborted.stat = true;
     };
   }, [edgeSvg, events, graphData.edges, graphData.nodes, nodeSvg, radius, simulation]);
+
+  useEffect(() => {
+    if (options?.node?.lookAt) {
+      const findNode = nodes.find(node => node.name === options?.node?.lookAt);
+      if (findNode) {
+        const left = -(width / 2 - 700);
+        const transform = d3.zoomTransform(nodeSvg);
+
+        const invCenterPoint = transform.invert([width / 2 + left, height / 2]);
+        const newTranslate = transform.translate(invCenterPoint[0] - findNode.x, invCenterPoint[1] - findNode.y);
+        svg
+          .select('g.main')
+          .transition()
+          .duration(750)
+          .call(zoomHandler.transform, newTranslate)
+          .end()
+          .then(() => {
+            // eslint-disable-next-line no-underscore-dangle
+            svg.node().__zoom = newTranslate;
+          });
+        nodeSvg.style('stroke', node => (node.name === findNode.name ? 'red' : ''));
+      }
+    }
+  }, [options?.node?.lookAt]);
 
   return (
     <svg

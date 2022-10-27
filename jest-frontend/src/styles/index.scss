@@ -1,7 +1,6 @@
 @import "./helper/variables.scss";
 
 body {
-  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
   sans-serif;
@@ -9,17 +8,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-html, body, #wrap {
-  background: $body-color;
-  width: 100%;
-  height: 100vh;
-  line-height: 1;
-  font-size: 16px;
-  overflow: hidden;
-}
-
-a {
-  text-decoration: none;
+html, body {
+  background: $body-color !important;
+  width: 100% !important;
+  height: 100vh !important;
+  line-height: 1 !important;
+  font-size: 15px !important;
+  overflow: hidden !important;
 }
 
 code {
@@ -66,5 +61,5 @@ code {
   }
 }
 
-
-@import './pages/main';
+@import './common';
+@import './pages';

@@ -6,6 +6,7 @@ import { GraphqlOptions } from '../graphql.options';
 import { OrganizationModule } from './graphql/organization/organization.module';
 import { WorkerModule } from './graphql/worker/worker.module';
 import { GraphModule } from './graphql/graph/graph.module';
+import { AuthModule } from './graphql/auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { GraphModule } from './graphql/graph/graph.module';
     OrganizationModule,
     WorkerModule,
     GraphModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

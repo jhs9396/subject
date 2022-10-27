@@ -6,9 +6,11 @@
   "config-overrides-path": "node_modules/react-app-rewired/config-overrides.js",
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.6",
+    "@tanstack/react-query": "^4.13.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "antd": "^4.23.6",
     "axios": "^0.21.1",
     "d3": "^7.6.1",
     "lodash": "^4.17.21",
@@ -22,6 +24,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:local": "env-cmd -e local react-app-rewired start",
+    "start:dev": "env-cmd -e dev react-app-rewired start",
+    "start:stag": "env-cmd -e stag react-app-rewired start",
+    "start:prod": "env-cmd -e prod react-app-rewired start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -45,6 +51,9 @@
     ]
   },
   "devDependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "@tanstack/react-query-devtools": "^4.13.0",
+    "@types/antd": "^1.0.0",
     "@types/axios": "^0.14.0",
     "@types/d3": "^7.4.0",
     "@types/lodash": "^4.14.186",
@@ -53,6 +62,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
+    "env-cmd": "^10.1.0",
     "eslint": "8.22.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",

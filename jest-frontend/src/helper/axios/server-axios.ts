@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { generateGqlQuery } from 'helper/recycle';
 
 declare module 'axios' {
   export interface AxiosResponse<T = any> extends Promise<T> {
@@ -13,19 +14,18 @@ declare module 'axios' {
 }
 
 const service = axios.create({
-  baseURL: 'http://localhost:4000',
+  baseURL: process.env.REACT_APP_API_SERVER_HOST,
   withCredentials: true,
   timeout: 60000
 });
 
 service.interceptors.request.use(
   config => {
-    config.headers.Authorization = `Bearer ${sessionStorage.getItem('token')}`;
-    config.headers.MedilinxBasic = `${sessionStorage.getItem('refreshToken')}`;
+    config.headers.Authorization = `Bearer ${sessionStorage.getItem('accessToken')}`;
     return config;
   },
   error => {
-    Promise.reject(error);
+    Promise.reject(error).then();
     return { error };
   }
 );
@@ -50,7 +50,7 @@ service.interceptors.request.use(
 //         queryFields: [{ fieldName: 'token' }, { fieldName: 'refreshToken' }],
 //         variables: { refreshToken: sessionStorage.getItem('refreshToken') }
 //       });
-//       const response = await axios.post(`${process.env.REACT_APP_KRAKEN}/graphql`, payload, headerConfig);
+//       const response = await axios.post(`${process.env.REACT_APP_API_SERVER_HOST}/graphql`, payload, headerConfig);
 //       const { data, errors = [] } = response.data;
 //       if (errors.length > 0) {
 //         sessionStorage.removeItem('token');

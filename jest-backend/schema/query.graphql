@@ -6,4 +6,5 @@ type Query {
     worker(name: String!): WorkerOutput
 
     graph: GraphOutput
+    graphExpand(graphInput: GraphInput): GraphOutput
 }

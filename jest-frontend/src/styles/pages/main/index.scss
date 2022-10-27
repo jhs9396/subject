@@ -18,12 +18,30 @@
 }
 
 .main {
-  .layout {
+  &__search {
+    position: relative;
+    display: flex;
+    padding: 1rem;
 
+    div.label {
+      font-style: italic;
+      width: 5rem;
+      align-self: center;
+    }
+  }
+  .ant-input-group {
+    opacity: 1;
+    width: 20% !important;
+
+    span {
+      padding-right: 0 !important;
+      padding-left: 0 !important;
+    }
   }
 
   .properties-display {
     border: 0.1rem solid #c4bbbb;
+    background-color: $body-color;
     max-width: 30%;
     height: 100%;
     margin: 1rem;

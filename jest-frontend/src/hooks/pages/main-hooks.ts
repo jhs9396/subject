@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { reselectGraph, reselectIsNodeClick, reselectNodeInfo } from 'stores/pages/main/main-reselect';
 import { setIsNodeClick, setNodeInfo } from 'stores/pages/main/main-slice';
 import { GraphType } from 'stores/pages/main/main-interface';
-import { queryMainGraph } from './main-query';
-import { asyncThunkGraphData } from '../../stores/pages/main/main-async-thunk';
+import { asyncThunkGraphData, asyncThunkGraphExpandData } from 'stores/pages/main/main-async-thunk';
+import { queryMainGraph, queryMainGraphExpand } from './main-query';
 
 export interface IMain {
   FetchIsNodeClick: () => boolean;
@@ -15,6 +15,8 @@ export interface IMain {
 
   FetchGraph: () => GraphType;
   SearchGraph: () => void;
+
+  SearchExpandGraph: (nodeInfo: JavascriptObject) => void;
 }
 
 export const useMain = (): IMain => {
@@ -42,6 +44,14 @@ export const useMain = (): IMain => {
     dispatch(asyncThunkGraphData({ payload }));
   }, [dispatch]);
 
+  const SearchExpandGraph = useCallback(
+    nodeInfo => {
+      const payload = queryMainGraphExpand(nodeInfo);
+      dispatch(asyncThunkGraphExpandData({ payload }));
+    },
+    [dispatch]
+  );
+
   return {
     FetchIsNodeClick,
     MutationIsNodeClick,
@@ -50,6 +60,8 @@ export const useMain = (): IMain => {
     MutationNodeInfo,
 
     FetchGraph,
-    SearchGraph
+    SearchGraph,
+
+    SearchExpandGraph
   };
 };

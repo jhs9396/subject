@@ -1,0 +1,5 @@
+type AuthPayload {
+    accessToken: String
+    refreshToken: String
+    exp: String
+}

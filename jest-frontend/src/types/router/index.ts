@@ -4,5 +4,6 @@ export type RouteType = {
   path: string;
   name: string;
   exact: boolean;
-  page: React.FunctionComponent;
+  page?: React.FunctionComponent;
+  modules?: RouteType[];
 };

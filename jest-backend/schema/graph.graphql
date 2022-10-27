@@ -1,20 +1,23 @@
 input GraphInput {
+    id: Int
+    label: String
     name: String
 }
 
-type Node {
+type GraphNode {
+    id: Int
     label: String
     name: String
     radius: Int
     color: String
 }
 
-type Edge {
-    source: String
-    target: String
+type GraphEdge {
+    source: Int
+    target: Int
 }
 
 type GraphOutput {
-    nodes: [Node]
-    edges: [Edge]
+    nodes: [GraphNode]
+    edges: [GraphEdge]
 }
