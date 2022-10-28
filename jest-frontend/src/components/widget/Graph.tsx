@@ -147,8 +147,6 @@ function Graph(props: IGraph) {
           d3.forceLink(edges).id((d: any) => (options.edge.id ? d[options.edge.id] : d.id))
         )
         .force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
-      // .force('x', d3.forceX(-100))
-      // .force('y', d3.forceY(-100));
       simulation.on('tick', tick);
     }
 

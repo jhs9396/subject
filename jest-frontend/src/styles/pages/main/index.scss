@@ -1,21 +1,4 @@
-@import "src/styles/helper/variables.scss";
-
-@keyframes slideIn{
-  from{
-    right: -100%;
-  }
-  to{
-    right: 0%;
-  }
-}
-@keyframes slideOut{
-  from{
-    right: 0%;
-  }
-  to{
-    right: -100%;
-  }
-}
+@import 'src/styles/helper/variables.scss';
 
 .main {
   &__search {
@@ -36,35 +19,6 @@
     span {
       padding-right: 0 !important;
       padding-left: 0 !important;
-    }
-  }
-
-  .properties-display {
-    border: 0.1rem solid #c4bbbb;
-    background-color: $body-color;
-    max-width: 30%;
-    height: 100%;
-    margin: 1rem;
-    padding: 1rem;
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: none;
-    word-break:normal;
-
-    &.on{
-      display: block;
-      animation-duration: 500ms;
-      animation-name: slideIn;
-      animation-fill-mode: both;
-    }
-
-    &.off{
-      display: none;
-      animation-delay: 400ms;
-      animation-duration: 250ms;
-      animation-name: slideOut;
-      animation-fill-mode: both;
     }
   }
 

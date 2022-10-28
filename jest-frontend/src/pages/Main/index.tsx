@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Input } from 'antd';
+import DetailInfo from 'components/widget/DetailInfo';
 import Graph from 'components/widget/Graph';
 import { useMain } from 'hooks/pages/main-hooks';
+import NodeProperties from 'pages/Main/NodeProperties';
 
 const { Search } = Input;
 
 function Main() {
-  const {
-    FetchIsNodeClick,
-    MutationIsNodeClick,
-    FetchNodeInfo,
-    MutationNodeInfo,
-    FetchGraph,
-    SearchGraph,
-    SearchExpandGraph
-  } = useMain();
+  const { FetchIsNodeClick, MutationIsNodeClick, MutationNodeInfo, FetchGraph, SearchGraph, SearchExpandGraph } =
+    useMain();
   const [searchNodeName, setSearchNodeName] = useState<string>('');
 
-  const onSearch = (value: string) => setSearchNodeName(value);
+  const onSearch = useCallback((value: string) => setSearchNodeName(value), []);
 
   useEffect(() => {
     SearchGraph();
@@ -56,9 +51,15 @@ function Main() {
           }
         }}
       />
-      <div className={FetchIsNodeClick() ? 'properties-display on' : 'properties-display off'}>
-        {JSON.stringify(FetchNodeInfo(), null, 2)}
-      </div>
+      <DetailInfo
+        contents={[
+          {
+            title: '속성정보',
+            component: NodeProperties
+          }
+        ]}
+        isOpen={FetchIsNodeClick()}
+      />
     </div>
   );
 }
