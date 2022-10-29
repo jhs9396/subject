@@ -70,16 +70,16 @@
 - cypher language를 해석하기 위한 util 클래스
   - CypherHandler.java
 ```java
-// 전달받은 Cypher Query 문장 단위 자르기 기능
-public String chkSentenceType(String sentence) { ... }
-// 문장별로 Cypher Query 해석
-public Map<String,Object> parseCypherQuery(String query) { ... }
-// Cypher query MATCH문 해석
-private Map<String,Object> parseMatch(String matchClause, Map<String,Object> params) { ... }
-// Cypher query WHERE 해석
-private Map<String,Object> parseWhere(String whereClause, Map<String,Object> params) { ... }
-// Cypher query RETURN 해석
-private Map<String,Object> parseReturn(String returnClause, Map<String,Object> params) { ... }
+    // 전달받은 Cypher Query 문장 단위 자르기 기능
+    public String chkSentenceType(String sentence) { ... }
+    // 문장별로 Cypher Query 해석
+    public Map<String,Object> parseCypherQuery(String query) { ... }
+    // Cypher query MATCH문 해석
+    private Map<String,Object> parseMatch(String matchClause, Map<String,Object> params) { ... }
+    // Cypher query WHERE 해석
+    private Map<String,Object> parseWhere(String whereClause, Map<String,Object> params) { ... }
+    // Cypher query RETURN 해석
+    private Map<String,Object> parseReturn(String returnClause, Map<String,Object> params) { ... }
 ```
 # 구현 리스트
 - Cypher Query Wrapper 구현
@@ -95,6 +95,12 @@ private Map<String,Object> parseReturn(String returnClause, Map<String,Object> p
         - 기능별 `API`도 지원하되, Graph 컨셉에 맞는 기능을 구현하여 제공
     - `/query` API 사용 권장
     - `/query/cypher` Cypher query 사용할 수 있는 API
+
+# 이슈사항
+ - [Elasticsearch Java연동](https://github.com/jhs9396/subject/blob/master/cypher-db-backend/documents/troubleshooting1.md)
+ - [Elasticsearch 설치](https://github.com/jhs9396/subject/blob/master/cypher-db-backend/documents/troubleshooting2.md)
+ - [Redis 설치 및 RedisGraph 사용방법](https://github.com/jhs9396/subject/blob/master/cypher-db-backend/documents/troubleshooting3.md)
+ - [Elasticsearch not starting](https://github.com/jhs9396/subject/blob/master/cypher-db-backend/documents/troubleshooting4.md)
 
 # 기타 해야 할 것
 - `TODO` Graph Data Clustering
