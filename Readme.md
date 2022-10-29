@@ -25,10 +25,13 @@ python-server
      flask app 인스턴스에 use function을 정의하여 인스턴스 내 
      router 또는 클래스 인스턴스를 전달받은 base url과 관리
  - app/route/common/api_common.py
+ - app/route/api_main.py
+ - app/util/annotation.py
    - SpringBoot annotation과 유사하게 동작시키기 위해 decorator를 사용 
  - app/route/api_analysis.py
+ - app/util/router/router.py
    - Express router와 유사하게 사용하기 위하여 get, post별 실행시킬 함수를 정의
-   - 파이썬의 분석 라이브러리를 사용하여 간단한 그래프 클러스터링(루벵-메소드) 기능
+   - 파이썬의 networkx 및 분석 라이브러리를 사용하여 간단한 그래프 클러스터링(루벵-메소드) 기능
    
 jest-backend
  - graph.resolver.ts

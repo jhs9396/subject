@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57447316-1eab-4e69-9222-499142ad7303" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/jest-frontend/public/desc.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jest-backend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/jest-backend/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jest-backend/graphql.options.ts" beforeDir="false" afterPath="$PROJECT_DIR$/jest-backend/graphql.options.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jest-frontend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/jest-frontend/README.md" afterDir="false" />
-    </list>
+    <list default="true" id="57447316-1eab-4e69-9222-499142ad7303" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
