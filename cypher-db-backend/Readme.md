@@ -4,7 +4,7 @@
 - 그래프 언어로 조회된 이기종 데이터를 `HTTP REST API`통신으로 내부/외부에 공유한다.
 
 # Environment
-- Java JDK 16.X
+- Java JDK 1.8.X higher
     - 백앤드 작업
         - 이기종 데이터 핸들링(CRUD)
         - REST API 채널
@@ -32,6 +32,42 @@
 # 실행 방법
 - `mvn spring-boot:run`
     - SpringBoot server 실행
+
+# 프로젝트 파일 구조
+```java
+api/
+ ㄴ inf/
+    - REST API에 요청에 따라 사용되는 서비스 인터페이스
+ ㄴ service/
+    - REST API 요청 서비스 파일
+common/
+ ㄴ header/
+    - 프로젝트에 필요한 RestController 기본 기능 정의
+config/
+    - 프로젝트에 필요한 공통 Configuration
+controller/
+    - 이기종 데이터베이스 및 SpringBoot에서 Python 연동을 위한 RestController
+dao/
+    - 이기종 데이터베이스 인터페이스 및 구현체
+elasticsearch/
+ ㄴ component/
+    - elasticsearch 고유기능 사용을 위한 인터페이스 및 서비스 구현체 
+ ㄴ config/
+    - elasticsearch 고유설정
+ ㄴ controller/
+    - elasticsearch 고유기능 제공을 위한 RestController
+runner/
+ ㄴ 테스트용 처음 시작시점에 기동되는 component
+utils/
+ ㄴ handler
+    - Cypher Language를 해석하고 파싱하기 위한 작업용 핸들러
+logger/
+    - 프로젝트에서 사용되는 logger
+python/
+    - Py4j 테스트용
+vo/
+    - 프로젝트에서 사용되는 기본 정보 오브젝트 (yaml 파일 설정 값 또는 쿼리 저장)
+```
 
 # 프로젝트 주요 소스 설명
 - 이기종 데이터베이스 연결 관리 및 이기종 데이터 그래프 질의언어 Cypher 해석기
