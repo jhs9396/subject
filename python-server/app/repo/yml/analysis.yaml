@@ -1,0 +1,131 @@
+cluster:
+  run_louvain: |
+    SELECT louvain_method_algo()
+  run_girvan_newman: |
+    SELECT girvan_newman_script()
+  run_infomap: |
+    SELECT infomap_script()
+
+rf:
+  feature:
+    extraction: |
+      INSERT INTO TABLE %(table_name)s
+      SELECT replace(grp.intrusion_name::text,'"','')
+                 replace(grp.sha1::text,'"',''),
+                 replace(grp.imphash::text,'"',''),
+                 replace(grp.ssdeep::text,'"',''),
+                 replace(grp.filename::text,'"',''),
+                 grp.filesize::int,
+                 grp.sections::int,
+                 string_to_array(replace(replace(grp.entropy::text,'[',''),']',''),',')::float[],
+                 replace(grp.rel_value1::text,'"',''),
+                 replace(grp.rel_value2::text,'"',''),
+                 replace(grp.rel_value3::text,'"','')
+           FROM (
+                  MATCH (a:ioc)-[:ref_to]->(b:ioc)<-[:related_to]-(c:ioc)<-[:related_to]-(d:ioc)
+                  WHERE a.src='virus_total'
+                  AND c.type='domain'
+                  AND b.name=%(intrusion_name)s
+                  RETURN b.name AS intrusion_name,
+                         a.sha1 AS sha1,a.imphash AS imphash,
+                         a.ssdeep AS ssdeep,a.filename AS filename,
+                         a.filesize AS filesize,a.sections AS sections,a.entropy AS entropy,
+                         b.value AS rel_value1,c.value AS rel_value2,d.value AS rel_value3
+                  UNION
+                  MATCH (a:ioc)<-[:ref_to]-(b:ioc)<-[:related_to]-(c:ioc)<-[:related_to]-(d:ioc)
+                  WHERE a.src='virus_total'
+                  AND c.type='domain'
+                  AND b.name=%(intrusion_name)s
+                  RETURN b.name AS intrusion_name,
+                         a.sha1 AS sha1,a.imphash AS imphash,
+                         a.ssdeep AS ssdeep,a.filename AS filename,
+                         a.filesize AS filesize,a.sections AS sections,a.entropy AS entropy,
+                         b.value AS rel_value1,c.value AS rel_value2,d.value AS rel_value3
+                  UNION
+                  MATCH (a:ioc)-[:ref_to]->(b:ioc)<-[:related_to]-(c:ioc)-[:related_to]->(d:ioc)
+                  WHERE a.src='virus_total'
+                  AND c.type='domain'
+                  AND b.name=%(intrusion_name)s
+                  RETURN b.name AS intrusion_name,
+                         a.sha1 AS sha1,a.imphash AS imphash,
+                         a.ssdeep AS ssdeep,a.filename AS filename,
+                         a.filesize AS filesize,a.sections AS sections,a.entropy AS entropy,
+                         b.value AS rel_value1,c.value AS rel_value2,d.value AS rel_value3
+                  UNION
+                  MATCH (a:ioc)<-[:ref_to]-(b:ioc)<-[:related_to]-(c:ioc)-[:related_to]->(d:ioc)
+                  WHERE a.src='virus_total'
+                  AND c.type='domain'
+                  AND b.name=%(intrusion_name)s
+                  RETURN b.name AS intrusion_name,
+                         a.sha1 AS sha1,a.imphash AS imphash,
+                         a.ssdeep AS ssdeep,a.filename AS filename,
+                         a.filesize AS filesize,a.sections AS sections,a.entropy AS entropy,
+                         b.value AS rel_value1,c.value AS rel_value2,d.value AS rel_value3
+                  ) grp
+           LIMIT %(target_cnt)s
+
+    train: |
+      SELECT cti_rf_train()
+
+    validate: |
+      SELECT cti_rf_valid()
+
+  schema:
+    get_intrusion_list: |
+      SELECT DISTINCT name
+      FROM mitre_intrusion_set
+
+    train_table_existence: |
+      SELECT relname
+      FROM pg_stat_all_tables
+      WHERE relname='rf_train_set'
+
+    test_table_existence: |
+      SELECT relname
+      FROM pg_stat_all_tables
+      WHERE relname='rf_test_set'
+
+    rf_train_set: |
+      CREATE TABLE rf_train_set (
+        intrusion_name text,
+        sha1 text,
+        imphash text,
+        ssdeep text,
+        filename text,
+        filesize int,
+        sections int,
+        entropy float[],
+        rel_value1 text,
+        rel_value2 text,
+        rel_value3 text
+      )
+
+    rf_test_set: |
+      CREATE TABLE rf_test_set (
+        intrusion_name text,
+        sha1 text,
+        imphash text,
+        ssdeep text,
+        filename text,
+        filesize int,
+        sections int,
+        entropy float[],
+        rel_value1 text,
+        rel_value2 text,
+        rel_value3 text
+      )
+
+    rf_predict_target: |
+      CREATE TABLE rf_predict_target (
+        md5 text,
+        sha1 text,
+        imphash text,
+        ssdeep text,
+        filename text,
+        filesize int,
+        sections int,
+        entropy float[],
+        rel_value1 text,
+        rel_value2 text,
+        rel_value3 text
+      )

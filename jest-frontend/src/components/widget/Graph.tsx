@@ -219,7 +219,7 @@ function Graph(props: IGraph) {
       .on('click', (event, d) => {
         event.stopPropagation();
         if (events?.nodeClick) {
-          events.nodeClick(true, { ...d });
+          events.nodeClick(true, { properties: { ...d }, edges: cloneDeep(edges) });
         }
       })
       .on('dblclick', (event, d) => {

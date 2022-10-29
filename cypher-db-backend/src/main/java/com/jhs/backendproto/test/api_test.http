@@ -1,0 +1,154 @@
+### Elasticsearch 직접 API 조회
+GET http://localhost:9200/customer2/info/2?pretty
+Accept: application/json
+
+### Elasticsearch Cypher 문으로 조회
+POST http://localhost:8085/query/cypher
+Content-Type: application/json
+
+{
+  "daoName": "ElasticsearchDao",
+  "queryName": "cypher.test2"
+}
+
+### Elasticsearch Cypher 문으로 조회
+POST http://localhost:8085/query/cypher
+Content-Type: application/json
+
+{
+  "daoName": "ElasticsearchDao",
+  "queryName": "cypher.test4"
+}
+
+### Elasticsearch Cypher 문으로 조회
+POST http://localhost:8085/query/cypher
+Content-Type: application/json
+
+{
+  "daoName": "ElasticsearchDao",
+  "query": "MATCH (man:customer2)-[r:knows]->(man1:customer2) \nWHERE man.name = 'jhs' \nRETURN man, man1"
+}
+
+
+### Elasticsearch Cypher 문으로 조회
+POST http://localhost:8085/query/cypher
+Content-Type: application/json
+
+{
+  "daoName": "ElasticsearchDao",
+  "queryName": "cypher.test6"
+}
+
+### AgensGraph DAO 테스트
+POST http://localhost:8085/query/cypher
+Content-Type: application/json
+
+{
+  "daoName": "AgensGraphDao",
+  "queryName": "select.now"
+}
+
+
+### 메타정보 조회기
+POST http://localhost:8085/query
+Content-Type: application/json
+
+{
+    "daoName": "PostgresDao",
+    "queryName": "meta.selectSnapshot",
+    "type": "elasticsearch"
+}
+
+
+### Py4j server connection
+POST http://localhost:8085/python/conn
+Content-Type: application/json
+
+### Py4j server stop
+POST http://localhost:8085/python/stop
+Content-Type: application/json
+
+### Py4j executor run
+POST http://localhost:8085/python/run
+Content-Type: application/json
+
+{
+  "script": "a=1"
+}
+
+
+### python flask http rest api test
+### 변수를 받을 내용을 같이 주고 그 변수를 locals로 부르면 되네
+POST http://localhost:5000/login/setter
+Content-Type: application/json
+
+{
+  "user": "jhs1"
+}
+
+
+
+### python flask http rest api test
+### 변수를 받을 내용을 같이 주고 그 변수를 locals로 부르면 되네
+POST http://localhost:5000/exec/script
+Content-Type: application/json
+
+{
+  "variable": "res1",
+  "script": "import pandas as pd\n\ndf = pd.DataFrame({'a': [1,2,3,4]})\r\nres1 = df.to_dict()"
+}
+
+
+### python flask http rest api test
+### 변수를 받을 내용을 같이 주고 그 변수를 locals로 부르면 되네
+POST http://localhost:5000/exec/
+Content-Type: application/json
+
+{
+  "script": "df['b'] = 5"
+}
+
+
+
+### python flask http rest api test
+### 변수를 받을 내용을 같이 주고 그 변수를 locals로 부르면 되네
+POST http://localhost:5000/test2/execute
+Content-Type: application/json
+
+{
+  "variable": "res1",
+  "script": "import pandas as pd\n\ndf = pd.DataFrame({'a': [1,2,3,4]})\r\nres1 = df.to_dict()"
+}
+
+
+
+### python flask http rest api test
+### 변수를 받을 내용을 같이 주고 그 변수를 locals로 부르면 되네
+POST http://localhost:3000/db/todos
+Content-Type: application/json
+
+{
+  "_id": "test1",
+  "title": "zkzkzkzk",
+  "script": "import pandas as pd\n\ndf = pd.DataFrame({'a': [1,2,3,4]})\r\nres1 = df.to_dict()"
+}
+
+### 변수를 받을 내용을 같이 주고 그 변수를 locals로 부르면 되네
+POST http://localhost:3000/db/todos/_find
+Content-Type: application/json
+
+{
+  "selector": {
+    "title": "zkzkzkzk"
+  },
+  "fields": [
+    "title",
+    "script"
+  ]
+}
+
+
+###
+#GET https://docs.google.com/spreadsheets/d/1tAJw_k_PtBfULH2wW4RWTMKsl8Y5R32igFjUG7lXmpU/edit?usp=sharing
+GET https://docs.google.com/spreadsheets/d/1tAJw_k_PtBfULH2wW4RWTMKsl8Y5R32igFjUG7lXmpU/gviz/tq
+Content-Type: application/json

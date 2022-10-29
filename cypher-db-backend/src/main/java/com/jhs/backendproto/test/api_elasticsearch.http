@@ -1,0 +1,182 @@
+### list
+GET http://localhost:9200/_cat/indices?pretty
+Content-Type: application/json
+
+
+### list
+POST http://localhost:8085/elasticsearch/indices
+Content-Type: application/json
+
+### Elasticsearch get document property keys
+POST http://localhost:8085/elasticsearch/idx/keys
+Content-Type: application/json
+
+{
+  "idx": "customer2"
+}
+
+### Elasticsearch get document property keys
+POST http://localhost:8085/elasticsearch/indices/meta
+Content-Type: application/json
+
+{
+  "idx": "customer2"
+}
+
+
+
+### Elasticsearch create document api
+POST http://localhost:8085/elasticsearch/create
+Content-Type: application/json
+
+{
+  "idx": "customer2",
+  "id": "3",
+  "params": {
+    "id": "3",
+    "name": "ljh",
+    "age": 31,
+    "knows": ["1", "6"]
+  }
+}
+
+### index가 customer2인 document 전체 조회
+GET http://localhost:9200/customer2/_search
+Content-Type: application/json
+
+
+### Elasticsearch search document api
+POST http://localhost:8085/elasticsearch/search
+Content-Type: application/json
+
+{
+  "idx": "customer2"
+}
+
+### Elasticsearch delete document api
+POST http://localhost:8085/elasticsearch/delete
+Content-Type: application/json
+
+{
+  "idx": "customer2",
+  "id": "3"
+}
+
+
+
+### Elasticsearch Cypher 문으로 조회
+POST http://localhost:8085/elasticsearch/create
+Content-Type: application/json
+
+{
+  "idx": "my-index-000001",
+  "id": 1,
+  "params": {
+    "properties": {
+      "obj1": {
+        "type": "nested"
+      }
+    }
+  }
+}
+
+###
+GET http://localhost:9200/drivers/_search
+Content-Type: application/json
+
+###
+PUT http://localhost:9200/drivers
+Content-Type: application/json
+
+{
+  "mappings": {
+    "properties": {
+      "driver": {
+        "type": "nested",
+        "properties": {
+          "last_name": {
+            "type": "text"
+          },
+          "vehicle": {
+            "type": "nested",
+            "properties": {
+              "make": {
+                "type": "text"
+              },
+              "model": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+###
+PUT http://localhost:9200/drivers/_doc/1
+Content-Type: application/json
+
+{
+  "driver" : {
+    "last_name" : "McQueen",
+    "vehicle" : [
+      {
+        "make" : "Powell Motors",
+        "model" : "Canyonero"
+      },
+      {
+        "make" : "Miller-Meteor",
+        "model" : "Ecto-1"
+      }
+    ]
+  }
+}
+
+###
+PUT http://localhost:9200/drivers/_doc/2
+Content-Type: application/json
+
+{
+  "driver" : {
+    "last_name" : "Hudson",
+    "vehicle" : [
+      {
+        "make" : "Mifune",
+        "model" : "Mach Five"
+      },
+      {
+        "make" : "Miller-Meteor",
+        "model" : "Ecto-1"
+      }
+    ]
+  }
+}
+
+
+###
+GET http://localhost:9200/drivers/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "nested": {
+      "path": "driver",
+      "query": {
+        "nested": {
+          "path": "driver.vehicle",
+          "query": {
+            "bool": {
+              "must": [
+                { "match": { "driver.vehicle.make": "Miller-Meteor" } },
+                { "match": { "driver.vehicle.model": "Ecto-1" } }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

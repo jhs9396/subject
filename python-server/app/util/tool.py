@@ -30,3 +30,18 @@ def endpoint(base_url, url) -> str:
 def add_url_rule(app, url, func, **options) -> None:
     app.add_url_rule(url, url, func, **options)
     app.add_url_rule(url + '/', url + '/', func, **options)
+
+# -*- coding: utf-8 -*-
+import datetime as dt
+
+def to_list(text):
+    """
+    set string { ... } to list
+    """
+    return text.replace('{','').replace('}','').split(',')
+
+def to_time(text):
+    """
+    convert year, month, day
+    """
+    return dt.datetime.strptime(text.split(' ')[0], '%Y-%m-%d')

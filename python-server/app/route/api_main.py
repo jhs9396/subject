@@ -9,6 +9,6 @@ class ApiMain(ApiCommon):
     @request_mapping(url='/')
     def root(self):
         if self.app is not None:
-            return '<div>Hello, World</div>'
+            return { 'status': 3 }
         else:
             pass

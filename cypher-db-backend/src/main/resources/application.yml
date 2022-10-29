@@ -1,0 +1,34 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+#    include: postgres, agensgraph, elasticsearch
+    include: postgres, elasticsearch
+  datasource:
+    continue-on-error:  false
+    hikari:
+      agens:
+        jdbc-url: jdbc:agensgraph://localhost:5432/ctias
+        username: ctias
+        password: ctias123!
+        graph-path: ctias
+        driver-class-name: net.bitnine.agensgraph.Driver
+      pg:
+        jdbc-url: jdbc:postgresql://localhost:5555/postgres
+        username: postgres
+        password: postgres
+        driver-class-name: org.postgresql.Driver
+    elasticsearch:
+      host: 127.0.0.1
+      port: 9200
+      hosts: 127.0.0.1:9200
+      cluster_name: docker-cluster
+  dao:
+    default-path: com.jhs.backendproto.dao
+    enabled-cypher:
+      elasticsearch: true
+      agens: false
+      postgres: false
+
+server:
+  port: 8085

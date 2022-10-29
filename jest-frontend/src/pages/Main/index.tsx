@@ -2,21 +2,51 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Input } from 'antd';
 import DetailInfo from 'components/widget/DetailInfo';
 import Graph from 'components/widget/Graph';
-import { useMain } from 'hooks/pages/main-hooks';
+import { useCommon } from 'hooks/common/common-hooks';
+import { useMain } from 'hooks/pages/main/main-hooks';
 import NodeProperties from 'pages/Main/NodeProperties';
+import NodeClustering from 'pages/Main/NodeClustering';
+import { ContentType } from 'types/components/widget/detail-info';
 
 const { Search } = Input;
 
 function Main() {
-  const { FetchIsNodeClick, MutationIsNodeClick, MutationNodeInfo, FetchGraph, SearchGraph, SearchExpandGraph } =
-    useMain();
+  const { QueryIsRunningPythonServer } = useCommon();
+  const {
+    FetchIsNodeClick,
+    MutationIsNodeClick,
+    MutationNodeInfo,
+    FetchGraph,
+    SearchGraph,
+    SearchExpandGraph,
+    MutationNodeClusterInfo
+  } = useMain();
+  const { data: PythonServerStatus } = QueryIsRunningPythonServer();
   const [searchNodeName, setSearchNodeName] = useState<string>('');
+  const [detailInfoContents, setDetailInfoContents] = useState<ContentType[]>([
+    {
+      title: '속성정보',
+      component: NodeProperties
+    }
+  ]);
 
   const onSearch = useCallback((value: string) => setSearchNodeName(value), []);
 
   useEffect(() => {
     SearchGraph();
   }, [SearchGraph]);
+
+  useEffect(() => {
+    if (PythonServerStatus === 3) {
+      setDetailInfoContents([
+        ...detailInfoContents,
+        {
+          title: '클러스터링',
+          component: NodeClustering
+        }
+      ]);
+    }
+  }, [PythonServerStatus]);
 
   return (
     <div className="main">
@@ -45,21 +75,14 @@ function Main() {
           nodeClick(isClick: boolean, nodeInfo: JavascriptObject) {
             MutationIsNodeClick(isClick);
             MutationNodeInfo(nodeInfo);
+            MutationNodeClusterInfo('init');
           },
           nodeExpend(selectedNode: JavascriptObject) {
             SearchExpandGraph({ id: selectedNode.id, name: selectedNode.name, label: selectedNode.label });
           }
         }}
       />
-      <DetailInfo
-        contents={[
-          {
-            title: '속성정보',
-            component: NodeProperties
-          }
-        ]}
-        isOpen={FetchIsNodeClick()}
-      />
+      <DetailInfo contents={detailInfoContents} isOpen={FetchIsNodeClick()} />
     </div>
   );
 }

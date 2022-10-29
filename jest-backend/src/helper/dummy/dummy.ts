@@ -1,4 +1,4 @@
-import { OrganizationInput, WorkerInput } from '../../graphql.schema.generated';
+import { OrganizationInput, WorkerInput } from 'src/graphql.schema.generated';
 
 type DataType = {
   organizations: OrganizationInput[];

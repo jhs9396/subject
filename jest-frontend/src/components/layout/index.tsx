@@ -23,9 +23,10 @@ const pages = [
 ];
 
 function Layout() {
-  const { QueryToken } = useCommon();
+  const { QueryToken, QueryIsRunningPythonServer } = useCommon();
   const navigate = useNavigate();
   const { isLoading: isSearchToken } = QueryToken('test');
+  QueryIsRunningPythonServer();
 
   useEffect(() => {
     sessionStorage.removeItem('token');

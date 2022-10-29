@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import { get } from 'lodash';
-import { sendApi } from 'helper/api';
+import { sendApi, sendPythonApi } from 'helper/api';
 import { queryGenerateToken } from 'hooks/common/common-query';
 import { reselectTitleState } from 'stores/common/common-reselect';
 import { setTitle } from 'stores/common/common-slice';
@@ -14,6 +14,8 @@ export interface ICommon {
 
   QueryToken: (id: string) => UseQueryResult;
   FetchToken: () => IToken;
+
+  QueryIsRunningPythonServer: () => UseQueryResult;
 }
 
 export const useCommon = (): ICommon => {
@@ -43,5 +45,16 @@ export const useCommon = (): ICommon => {
 
   const FetchToken = () => queryClient.getQueryData(['accessToken']) as IToken;
 
-  return { FetchTitle, MutationTitle, QueryToken, FetchToken };
+  const QueryIsRunningPythonServer = () => {
+    return useQuery(['isRunningPythonServer'], async () => {
+      try {
+        const res = await sendPythonApi('/', 'GET', {}, {});
+        return res?.data ? res.data.status : null;
+      } catch (error) {
+        return null;
+      }
+    });
+  };
+
+  return { FetchTitle, MutationTitle, QueryToken, FetchToken, QueryIsRunningPythonServer };
 };

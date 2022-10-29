@@ -4,7 +4,6 @@ import { AuthService } from 'src/graphql/auth/auth.service';
 import { AuthResolver } from 'src/graphql/auth/auth.resolver';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from 'src/graphql/auth/jwt.strategy';
-import { BasicMiddleware } from 'src/helper/middleware/basic.middleware';
 
 @Module({
   imports: [

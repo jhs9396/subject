@@ -1,0 +1,56 @@
+elasticsearch:
+  cypher:
+    # language=SQL
+    test1: |
+      MATCH (a:customer2)
+      WHERE a.name = 'jhs'
+      RETURN a
+
+    # language=SQL
+    test2: |
+      MATCH (a:customer2)
+      WHERE a.name = 'jhs'
+      RETURN a.name, a.age
+
+    # language=SQL
+    test3: |
+      MATCH (a:customer2)
+      WHERE a.name = 'jhs'
+      RETURN a.name AS nm, a.age ag
+
+    # language=SQL
+    test4: |
+      MATCH (a:customer2)-[r:knows]->(b:customer2)
+      WHERE a.name = 'jhs'
+      RETURN a, b
+
+    # language=SQL
+    test5: |
+      MATCH (a:customer2)<-[r:knows]-(b:customer2)
+      WHERE b.age > 34
+      RETURN a, b
+
+    # language=SQL
+    test6: |
+      MATCH (a:customer2)
+      WHERE a.name = 'jhs'
+      RETURN a
+      UNION
+      MATCH (b:customer2)
+      WHERE b.name = 'kkm'
+      RETURN b
+
+    # language=SQL
+    test7: |
+      MATCH (a:customer2) RETURN a
+
+    # language=SQL
+    test8: |
+      MATCH (a:customer)-[r]->(b:customer)
+      WHERE a.id = '1'
+      AND   b.id = '2'
+      RETURN a.name AS a_name, b.name AS b_name
+
+    # language=SQL
+    node: |
+      MATCH (a:customer2) WHERE a.id = '2' RETURN a

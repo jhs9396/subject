@@ -1,0 +1,102 @@
+postgres:
+  # language=SQL
+  ttt: |
+    SELECT
+        *
+    FROM
+        t_111
+  meta:
+    # language=SQL
+    select: |
+      SELECT
+          type
+        , label
+        , source
+        , target
+      FROM
+          public.graph_meta
+
+    # graph node insert for meta
+    # language=SQL
+    countNodes: |
+      SELECT
+          label
+        , COUNT(*) AS cnt
+      FROM
+          public.graph_meta_node
+      WHERE
+          type = :type
+      GROUP BY
+          label
+
+    # graph edge insert for meta
+    # language=SQL
+    countEdges: |
+      SELECT
+          label
+        , COUNT(*) AS cnt
+      FROM
+          public.graph_meta_edge
+      WHERE
+          type = :type
+      GROUP BY
+          label
+
+    # graph node insert for meta
+    # language=SQL
+    insertNode: |
+      INSERT INTO public.graph_meta_node(type, label) VALUES (:type, :label)
+
+    # graph node insert for meta
+    # language=SQL
+    deleteNode: |
+      DELETE FROM public.graph_meta_node WHERE type = :type
+
+    # graph edge insert for meta
+    # language=SQL
+    insertEdge: |
+      INSERT INTO public.graph_meta_edge(type, label) VALUES (:type, :label)
+
+    # graph edge insert for meta
+    # language=SQL
+    deleteEdge: |
+      DELETE FROM public.graph_meta_edge WHERE type = :type
+
+    # graph meta insert for linked nodes
+    # language=SQL
+    insertMeta: |
+      INSERT INTO public.graph_meta(type, source_label, target_label, edge_label) VALUES (:type, :source_label, :target_label, :edge_label)
+
+    # graph meta insert for linked nodes
+    # language=SQL
+    deleteMeta: |
+      DELETE FROM public.graph_meta WHERE type = :type
+
+    # language=SQL
+    insertSnapshot: |
+      INSERT INTO public.graph_meta_snapshot(type, nodes, edges, edge_labels) VALUES (:type, (:nodes)::json, (:edges)::json, (:edgeLabels)::json)
+
+    # language=SQL
+    selectSnapshot: |
+      SELECT
+          nodes
+        , edges
+        , edge_labels AS "edgeLabels"
+      FROM
+          public.graph_meta_snapshot
+      WHERE
+          type = :type
+
+    # language=SQL
+    deleteSnapshot: |
+      DELETE FROM public.graph_meta_snapshot WHERE type = :type
+
+  select:
+    # language=SQL
+    now: |
+      SELECT NOW()
+      FROM
+          t
+    test:
+      depth: |
+        WHERE ARE YOU

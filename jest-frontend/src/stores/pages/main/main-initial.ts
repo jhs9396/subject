@@ -5,5 +5,6 @@ export const initialState: IMain = {
   loading: false,
   isNodeClick: false,
   nodeInfo: {},
+  nodeClusterInfo: {},
   graph: { nodes: [], edges: [] }
 };

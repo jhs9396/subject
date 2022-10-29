@@ -1,0 +1,193 @@
+creation:
+  vertex: 
+    test: |
+      LOAD FROM public.test AS t
+      CREATE (:test=to_jsonb(t))
+  
+  edge:
+    ref_to: |
+      MATCH (a:test)
+      WHERE a.source_ip = %(source_ip)s
+      WITH a
+      ORDER BY a.dtime
+      LIMIT 1
+      MATCH (b:test)
+      WHERE id(a) <> id(b)
+      AND a.source_ip = b.source_ip
+      CREATE (a)<-[:ref_to]-(b)
+      
+    similar_to: |
+      MATCH (a:test)<-[r:ref_to]-(b:test)
+      WHERE a.source_ip = %(source_ip)s
+      WITH a
+      ORDER BY a.dtime
+      LIMIT 1
+      MATCH (a1:test)<-[r1:ref_to]-(b1:test)
+      WHERE id(a) <> id(a1)
+      AND a.source_ip <> a1.source_ip
+      AND a.dtime < a1.dtime
+      WITH DISTINCT a,a1, abs(ipv4_to_int(a.source_ip)-ipv4_to_int(a1.source_ip)) AS ip_similarity
+      WHERE ip_similarity <= 256
+      AND (NOT EXISTS ((a)<-[:similar_to]-(a1)) OR NOT EXISTS ((a)-[:similar_to]->(a1)))
+      CREATE (a)<-[:similar_to {weight:ip_similarity}]-(a1)
+      
+reading:
+  iplist: |
+    MATCH (a:test) RETURN DISTINCT a.source_ip AS ip
+  
+  rightanwser: |
+     SELECT 
+        (ROW_NUMBER() OVER())::int AS cluster_id, array_agg(DISTINCT b_id) || array_agg(c_id) AS nodes 
+     FROM 
+        (MATCH (a:test) WITH DISTINCT a.source_ip AS ip
+        MATCH (b:test)<-[r:ref_to]-(c)
+        WHERE ip = b.source_ip
+        RETURN DISTINCT id(b) AS b_id, id(c) AS c_id) t1
+     GROUP BY 
+        t1.b_id
+        
+  rightanwser2: |
+     SELECT 
+        (ROW_NUMBER() OVER())::int AS cluster_id, array_agg(DISTINCT b_id) || array_agg(c_id) AS nodes 
+     FROM 
+        (MATCH (a:test) WITH DISTINCT a.source_ip AS ip
+        MATCH (b:test)<-[r:ref_to]-(c)
+        WHERE ip = b.source_ip
+        RETURN DISTINCT id(b) AS b_id, id(c) AS c_id
+        UNION
+        MATCH (a:test) WITH DISTINCT a.source_ip AS ip
+        MATCH (b:test)-[r:similar_to]-(c)
+        WHERE ip = b.source_ip
+        RETURN DISTINCT id(b) AS b_id, id(c) AS c_id
+        ) t1
+     GROUP BY 
+        t1.b_id
+        
+  rightanwser3: |
+     SELECT 
+        (ROW_NUMBER() OVER())::int AS cluster_id, array_agg(DISTINCT b_id) || array_agg(DISTINCT c_id) AS nodes 
+     FROM 
+        (MATCH (a:test) WITH DISTINCT a.source_ip AS ip
+        MATCH (b:test)<-[r:ref_to]-(c)
+        WHERE ip = b.source_ip
+        RETURN DISTINCT id(b) AS b_id, id(c) AS c_id
+        UNION
+        MATCH (a:test) WITH DISTINCT a.source_ip AS ip
+        MATCH (b:test)-[r:similar_to]-(c)
+        WHERE ip = b.source_ip
+        RETURN DISTINCT id(b) AS b_id, id(c) AS c_id
+        ) t1
+     GROUP BY 
+        t1.b_id
+     UNION
+     SELECT
+        (ROW_NUMBER() OVER())::int AS cluster_id, array_agg(DISTINCT b_id) AS nodes
+     FROM   
+        (MATCH (a:test) WITH DISTINCT a.source_ip AS ip
+        MATCH (b:test)
+        WHERE ip = b.source_ip
+        AND NOT EXISTS ((b)-[]-())
+        RETURN DISTINCT id(b) AS b_id) t1
+     GROUP BY
+        t1.b_id
+    
+  node2node: |
+     MATCH (a)-[r]->(b) WHERE id(a) <> id(b) RETURN id(a) AS node, id(b) AS neighbor
+  
+  ip4oneNode: |
+     SELECT 
+        t2.a->>'source_ip' AS ip
+     FROM (     
+        SELECT
+           t1.b_id AS id
+        FROM
+           (MATCH (a:test) WITH DISTINCT a.source_ip AS ip
+           MATCH (b:test)
+           WHERE ip = b.source_ip
+           AND NOT EXISTS ((b)-[]-())
+           RETURN DISTINCT id(b) AS b_id) t1
+        GROUP BY
+           t1.b_id) t1,
+           (MATCH (a:test) RETURN id(a) AS id, a) t2
+     WHERE 
+        t1.id = t2.id
+     ORDER BY
+        ip ASC
+        
+  vertex: |
+    MATCH (a) WHERE id(a) = %(id)s RETURN a 
+
+algorithm:
+  louvain_method_result: |
+    SELECT cluster_id, nodes FROM public.louvain_method_result
+    
+  girvan_newman_result: |
+    SELECT cluster_id, nodes FROM public.girvan_newman_result
+    
+  infomap_result: |
+    SELECT cluster_id, nodes FROM public.infomap_result
+
+randomforest:
+  extract_rf_features: |
+    SELECT replace(grp.intrusion_name::text,'"','')
+           replace(grp.sha1::text,'"',''),
+           replace(grp.imphash::text,'"',''),
+           replace(grp.ssdeep::text,'"',''),
+           replace(grp.filename::text,'"',''),
+           grp.filesize::int,
+           grp.sections::int,
+           string_to_array(replace(replace(grp.entropy::text,'[',''),']',''),',')::float[],
+           replace(grp.rel_value1::text,'"',''),
+           replace(grp.rel_value2::text,'"',''),
+           replace(grp.rel_value3::text,'"','')
+     FROM (
+            MATCH (a:ioc)-[:ref_to]->(b:ioc)<-[:related_to]-(c:ioc)<-[:related_to]-(d:ioc)
+            WHERE a.src='virus_total'
+            AND c.type='domain'
+            AND (b.value=given_hash_value
+                 OR c.value=given_domain_value
+                 OR d.value=given_any_value
+                )
+            RETURN b.name AS intrusion_name,
+                   a.sha1 AS sha1,a.imphash AS imphash,
+                   a.ssdeep AS ssdeep,a.filename AS filename,
+                   a.filesize AS filesize,a.sections AS sections,a.entropy AS entropy,
+                   b.value AS rel_value1,c.value AS rel_value2,d.value AS rel_value3
+            UNION
+            MATCH (a:ioc)<-[:ref_to]-(b:ioc)<-[:related_to]-(c:ioc)<-[:related_to]-(d:ioc)
+            WHERE a.src='virus_total'
+            AND c.type='domain'
+            AND (b.value=given_hash_value
+                 OR c.value=given_domain_value
+                 OR d.value=given_any_value
+                )
+            RETURN b.name AS intrusion_name,
+                   a.sha1 AS sha1,a.imphash AS imphash,
+                   a.ssdeep AS ssdeep,a.filename AS filename,
+                   a.filesize AS filesize,a.sections AS sections,a.entropy AS entropy,
+                   b.value AS rel_value1,c.value AS rel_value2,d.value AS rel_value3
+            UNION
+            MATCH (a:ioc)-[:ref_to]->(b:ioc)<-[:related_to]-(c:ioc)-[:related_to]->(d:ioc)
+            WHERE a.src='virus_total'
+            AND c.type='domain'
+            AND (b.value=given_hash_value
+                 OR c.valc
+            RETURN b.name AS intrusion_name,
+                   a.sha1 AS sha1,a.imphash AS imphash,
+                   a.ssdeep AS ssdeep,a.filename AS filename,
+                   a.filesize AS filesize,a.sections AS sections,a.entropy AS entropy,
+                   b.value AS rel_value1,c.value AS rel_value2,d.value AS rel_value3
+            UNION
+            MATCH (a:ioc)<-[:ref_to]-(b:ioc)<-[:related_to]-(c:ioc)-[:related_to]->(d:ioc)
+            WHERE a.src='virus_total'
+            AND c.type='domain'
+            AND (b.value=given_hash_value
+                 OR c.value=given_domain_value
+                 OR d.value=given_any_value
+                )
+            RETURN b.name AS intrusion_name,
+                   a.sha1 AS sha1,a.imphash AS imphash,
+                   a.ssdeep AS ssdeep,a.filename AS filename,
+                   a.filesize AS filesize,a.sections AS sections,a.entropy AS entropy,
+                   b.value AS rel_value1,c.value AS rel_value2,d.value AS rel_value3
+            ) grp;

@@ -11,4 +11,4 @@ export const mainStore = createSlice({
 });
 
 export default mainStore.reducer;
-export const { setLoading, setIsNodeClick, setNodeInfo } = mainStore.actions;
+export const { setLoading, setIsNodeClick, setNodeInfo, setNodeClusterInfo, initNodeClusterInfo } = mainStore.actions;

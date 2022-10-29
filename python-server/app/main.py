@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_cors import CORS
 
-from app.route import api_test, api_test2, api_ocr
+from app.route import api_test, api_test2, api_ocr, api_analysis
 from app.route.api_execute import ApiExecute
 from app.route.api_login import ApiLogin
 from app.route.api_main import ApiMain
@@ -35,6 +36,7 @@ def use(self, base_url, router) -> None:
 setattr(Flask, 'use', use)
 
 app = Flask(__name__)
+CORS(app)
 app.config['DEBUG'] = True
 
 login_manager = LoginManager()
@@ -47,3 +49,4 @@ app.use('/exec', ApiExecute)
 app.use('/test', api_test)
 app.use('/test2', api_test2)
 app.use('/ocr', api_ocr)
+app.use('/analysis', api_analysis)

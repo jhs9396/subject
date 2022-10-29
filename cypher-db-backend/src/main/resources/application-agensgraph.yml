@@ -1,0 +1,5 @@
+agensgraph:
+  select:
+    # language=sql
+    now: |
+      SELECT NOW()

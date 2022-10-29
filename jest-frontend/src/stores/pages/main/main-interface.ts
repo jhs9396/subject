@@ -2,6 +2,7 @@ export interface IMain {
   loading: boolean;
   isNodeClick: boolean;
   nodeInfo: JavascriptObject;
+  nodeClusterInfo: NodeClusterType;
   graph: GraphType;
 }
 
@@ -38,4 +39,9 @@ export interface IExpandGraphResponse {
 export type GraphType = {
   nodes: IGraphNode[];
   edges: IGraphEdge[];
+};
+
+export type NodeClusterType = {
+  clusterKey?: string;
+  members?: string[];
 };
