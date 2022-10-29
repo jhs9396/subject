@@ -10,6 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "env-cmd -e local nest start",
+    "start:local": "env-cmd -e local nest start",
     "start:dev": "env-cmd -e dev nest start --watch",
     "start:stag": "env-cmd -e stag nest start --debug --watch",
     "start:prod": "env-cmd -e prod nest start --watch",

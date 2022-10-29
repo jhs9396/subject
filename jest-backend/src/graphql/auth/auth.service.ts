@@ -40,4 +40,32 @@ export class AuthService {
 
     return this.tokenInfo;
   }
+
+  async generateAccessToken(id: string) {
+    const accessToken = await this.jwt.signAsync(
+      {
+        type: 'web',
+        id,
+      },
+      {
+        secret: process.env.JWT_TOKEN_KEY,
+        expiresIn:
+          process.env.JWT_TOKEN_EXPIRESIN !== undefined
+            ? String(process.env.JWT_TOKEN_EXPIRESIN)
+            : 3600,
+      },
+    );
+    const exp = this.jwt.decode(accessToken)['exp'];
+    this.tokenInfo = { ...this.tokenInfo, accessToken, exp };
+
+    return accessToken;
+  }
+
+  async getMemoryTokenInfo() {
+    return JSON.parse(JSON.stringify(this.tokenInfo));
+  }
+
+  async setMemoryTokenInfo(token) {
+    this.tokenInfo = token;
+  }
 }

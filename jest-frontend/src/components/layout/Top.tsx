@@ -16,7 +16,7 @@ function Top() {
   return (
     <div className="layout__top">
       <HomeOutlined style={{ fontSize: '2rem' }} onClick={onGoHome} />
-      <MenuFoldOutlined style={{ fontSize: '2rem' }} onClick={onDetail} />
+      {/* <MenuFoldOutlined style={{ fontSize: '2rem' }} onClick={onDetail} /> */}
     </div>
   );
 }
